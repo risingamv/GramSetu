@@ -1,0 +1,2746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GramSetu | Village Grievance Portal (ग्राम सेतु)</title>
+  
+  <!-- Google Fonts: Baloo 2 for rounded display headings, Mukta for humanist body text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Mukta:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via allowlisted gstatic CDN -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  
+  <style>
+    /* Warm, trustworthy, government-civic design system */
+    :root {
+      --bg-cream: #FAF6EC;
+      --card-cream: #FCFAF5;
+      --card-white: #FFFFFF;
+      --forest-primary: #1B4332;
+      --forest-hover: #143626;
+      --forest-light: #E8F0EA;
+      --mustard-orange: #E07A24;
+      --mustard-hover: #C96615;
+      --mustard-light: #FDF1E6;
+      --sand-secondary: #F4EEDF;
+      --sand-border: #E8DEC8;
+      --sand-dark: #8C7B65;
+      --text-main: #242A24;
+      --text-muted: #5F685F;
+    }
+
+    body {
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      font-family: 'Mukta', system-ui, -apple-system, sans-serif;
+      font-size: 17px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-baloo {
+      font-family: 'Baloo 2', cursive, sans-serif;
+    }
+
+    /* Subtle paper dot texture */
+    .bg-dotted-pattern {
+      background-color: var(--sand-secondary);
+      background-image: radial-gradient(#D6C9B0 1.25px, transparent 1.25px);
+      background-size: 18px 18px;
+    }
+
+    .bg-dotted-soft {
+      background-image: radial-gradient(#E8DEC8 1.1px, transparent 1.1px);
+      background-size: 16px 16px;
+    }
+
+    /* Civic warm card styling */
+    .civic-card {
+      background-color: var(--card-white);
+      border: 1px solid var(--sand-border);
+      border-radius: 20px;
+      box-shadow: 0 4px 20px -2px rgba(60, 40, 20, 0.05), 0 2px 6px -1px rgba(60, 40, 20, 0.03);
+    }
+
+    /* Big tactile inputs and buttons (48px+ min-height) */
+    .touch-target {
+      min-height: 48px;
+    }
+
+    /* Pulse glow animation for active steps */
+    .pulse-glow {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(1.03); }
+    }
+
+    /* Custom smooth scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-cream);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--sand-border);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--sand-dark);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#FAF6EC] text-[#242A24]">
+
+  <!-- ======================================================== -->
+  <!-- 1. STICKY HEADER (All Pages) -->
+  <!-- ======================================================== -->
+  <header class="sticky top-0 z-40 bg-[#FAF6EC]/95 backdrop-blur-md border-b border-[#E8DEC8] transition-all">
+    <div class="max-w-6xl mx-auto px-4 py-2.5 sm:py-3 flex items-center justify-between gap-2">
+      
+      <!-- Logo & Brand -->
+      <a href="javascript:void(0)" onclick="navigateTo('home')" class="flex items-center gap-3 group">
+        <!-- Logo Mark: Forest green circle with cream Devanagari 'ग्रा' -->
+        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#1B4332] text-[#FAF6EC] font-baloo font-bold text-2xl flex items-center justify-center shadow-sm border border-[#143626] group-hover:scale-105 transition-transform flex-shrink-0">
+          ग्रा
+        </div>
+        <div class="leading-tight">
+          <div class="flex items-center gap-2">
+            <span class="font-baloo font-extrabold text-xl sm:text-2xl text-[#1B4332] tracking-tight">GramSetu</span>
+            <!-- Civic Subline Badge -->
+            <span class="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#E8F0EA] text-[#1B4332] border border-[#1B4332]/20">
+              🇮🇳 जन शिकायत मंच
+            </span>
+          </div>
+          <p class="text-xs sm:text-[13px] text-[#5F685F] font-medium truncate max-w-[190px] sm:max-w-none">
+            Village Grievance Portal • आपकी आवाज़, सही दफ़्तर तक
+          </p>
+        </div>
+      </a>
+
+      <!-- Navigation Pills -->
+      <nav class="flex items-center gap-1.5 sm:gap-2">
+        <button id="nav-btn-home" onclick="navigateTo('home')" class="touch-target px-3 sm:px-4 py-1.5 rounded-full text-[15px] sm:text-[16px] font-semibold transition-all bg-[#1B4332] text-white shadow-sm flex items-center gap-1.5">
+          <span>🏠</span>
+          <span class="hidden sm:inline">Home</span>
+        </button>
+        <button id="nav-btn-report" onclick="navigateTo('report')" class="touch-target px-3 sm:px-4 py-1.5 rounded-full text-[15px] sm:text-[16px] font-semibold transition-all text-[#1B4332] hover:bg-[#F4EEDF] flex items-center gap-1.5">
+          <span>✍️</span>
+          <span>Report</span>
+        </button>
+        <button id="nav-btn-track" onclick="navigateTo('track')" class="touch-target px-3 sm:px-4 py-1.5 rounded-full text-[15px] sm:text-[16px] font-semibold transition-all text-[#1B4332] hover:bg-[#F4EEDF] flex items-center gap-1.5">
+          <span>🔍</span>
+          <span>Track</span>
+        </button>
+        <button id="nav-btn-officials" onclick="navigateTo('officials')" class="touch-target px-3 sm:px-4 py-1.5 rounded-full text-[15px] sm:text-[16px] font-semibold transition-all text-[#1B4332] hover:bg-[#F4EEDF] flex items-center gap-1.5">
+          <span>🏛️</span>
+          <span class="hidden md:inline">Officials</span>
+        </button>
+        <button id="nav-btn-admin" onclick="navigateTo('admin')" class="hidden touch-target px-3 sm:px-4 py-1.5 rounded-full text-[15px] sm:text-[16px] font-bold transition-all bg-[#143626] text-white shadow-sm items-center gap-1.5">
+          <span>🛡️</span>
+          <span class="hidden md:inline">Admin</span>
+        </button>
+        <button id="auth-btn" onclick="openAuthModal()" class="touch-target px-3 sm:px-4 py-1.5 rounded-full text-[15px] sm:text-[16px] font-bold transition-all bg-[#E07A24] hover:bg-[#C96615] text-white flex items-center gap-1.5">
+          <span>🔐</span>
+          <span id="auth-btn-text">Login</span>
+        </button>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- Notification Toast Container -->
+  <div id="toast" class="fixed top-20 right-4 z-50 transform -translate-y-10 opacity-0 pointer-events-none transition-all duration-300 max-w-md w-full civic-card p-4 border-l-4 border-l-[#E07A24] flex items-center gap-3 text-[16px]">
+    <span id="toast-icon" class="text-2xl flex-shrink-0">ℹ️</span>
+    <div class="flex-1">
+      <div id="toast-title" class="font-bold text-[#1B4332] font-baloo leading-tight">Notification</div>
+      <div id="toast-desc" class="text-[14px] text-[#5F685F] leading-snug">Message description</div>
+    </div>
+  </div>
+
+  <!-- ====================================================== -->
+  <!-- SCREEN 5: DEVELOPER / ADMIN DASHBOARD -->
+  <!-- ====================================================== -->
+  <section id="screen-admin" class="hidden py-8 px-4 max-w-7xl mx-auto space-y-6">
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332] border border-[#1B4332]/20">
+          🛡️ Restricted Administration • Developer Console
+        </div>
+        <h1 class="font-baloo font-bold text-3xl sm:text-4xl text-[#1B4332] mt-2">GramSetu Control Center</h1>
+        <p class="text-[#5F685F]">Live SQLite data, AI routing, priorities, citizens and operational activity.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="adminIdentity" class="px-3 py-2 rounded-xl bg-white border border-[#E8DEC8] text-sm font-semibold text-[#1B4332]"></span>
+        <button onclick="loadAdminDashboard()" class="touch-target px-4 py-2 rounded-xl bg-[#1B4332] text-white font-bold">↻ Refresh</button>
+      </div>
+    </div>
+
+    <div id="adminError" class="hidden rounded-xl p-4 bg-red-50 border border-red-200 text-red-700"></div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
+      <div class="civic-card p-4"><div class="text-xs font-bold text-[#5F685F]">Complaints</div><div id="adm-total" class="text-3xl font-baloo font-extrabold text-[#1B4332]">—</div></div>
+      <div class="civic-card p-4"><div class="text-xs font-bold text-[#5F685F]">Citizens</div><div id="adm-citizens" class="text-3xl font-baloo font-extrabold text-[#1B4332]">—</div></div>
+      <div class="civic-card p-4"><div class="text-xs font-bold text-[#E07A24]">High Priority</div><div id="adm-high" class="text-3xl font-baloo font-extrabold text-[#E07A24]">—</div></div>
+      <div class="civic-card p-4"><div class="text-xs font-bold text-[#5F685F]">Open</div><div id="adm-pending" class="text-3xl font-baloo font-extrabold text-[#1B4332]">—</div></div>
+      <div class="civic-card p-4"><div class="text-xs font-bold text-[#5F685F]">Resolved / Closed</div><div id="adm-resolved" class="text-3xl font-baloo font-extrabold text-[#1B4332]">—</div></div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-4">
+      <div class="civic-card p-5">
+        <div class="flex justify-between items-center mb-4"><h2 class="font-baloo font-bold text-xl text-[#1B4332]">Priority distribution</h2><span class="text-xs text-[#5F685F]">AI + admin overrides</span></div>
+        <div id="adminPriorityChart" class="space-y-3"></div>
+      </div>
+      <div class="civic-card p-5">
+        <div class="flex justify-between items-center mb-4"><h2 class="font-baloo font-bold text-xl text-[#1B4332]">Complaint categories</h2><span class="text-xs text-[#5F685F]">AI routing</span></div>
+        <div id="adminCategoryChart" class="space-y-3"></div>
+      </div>
+    </div>
+
+    <div class="civic-card p-5 space-y-4">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+        <div>
+          <h2 class="font-baloo font-bold text-xl text-[#1B4332]">Complaint database</h2>
+          <p class="text-sm text-[#5F685F]">Search and update the actual SQLite records.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button id="admTabComplaints" onclick="switchAdminTab('complaints')" class="px-4 py-2 rounded-xl bg-[#1B4332] text-white font-bold text-sm">Complaints</button>
+          <button id="admTabClusters" onclick="switchAdminTab('clusters')" class="px-4 py-2 rounded-xl bg-[#FAF6EC] text-[#1B4332] border border-[#E8DEC8] font-bold text-sm">🔗 Similar Reports</button>
+          <button id="admTabCitizens" onclick="switchAdminTab('citizens')" class="px-4 py-2 rounded-xl bg-[#FAF6EC] text-[#1B4332] border border-[#E8DEC8] font-bold text-sm">Citizens</button>
+          <button id="admTabDb" onclick="switchAdminTab('database')" class="px-4 py-2 rounded-xl bg-[#FAF6EC] text-[#1B4332] border border-[#E8DEC8] font-bold text-sm">Database</button>
+        </div>
+      </div>
+
+      <div id="adminComplaintsPanel">
+        <div class="grid md:grid-cols-3 lg:grid-cols-6 gap-2 mb-3">
+          <input id="admSearch" oninput="debouncedAdminComplaints()" placeholder="Search ID, citizen, village…" class="touch-target px-3 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5]">
+          <select id="admStatus" onchange="loadAdminComplaints()" class="touch-target px-3 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5]"><option value="ALL">All status</option></select>
+          <select id="admPriority" onchange="loadAdminComplaints()" class="touch-target px-3 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5]"><option value="ALL">All priority</option></select>
+          <select id="admCategory" onchange="loadAdminComplaints()" class="touch-target px-3 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5]"><option value="ALL">All category</option></select>
+          <select id="admDistrict" onchange="loadAdminComplaints()" class="touch-target px-3 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5]"><option value="ALL">All districts</option></select>
+          <button onclick="exportAdminComplaints()" class="touch-target px-3 rounded-xl bg-[#E07A24] text-white font-bold">⬇ Export CSV</button>
+        </div>
+        <div class="overflow-x-auto border border-[#E8DEC8] rounded-xl">
+          <table class="w-full text-sm min-w-[1050px]">
+            <thead class="bg-[#F4EEDF] text-[#1B4332]"><tr>
+              <th class="p-3 text-left">ID / Date</th><th class="p-3 text-left">Citizen</th><th class="p-3 text-left">Location</th><th class="p-3 text-left">AI Route</th><th class="p-3 text-left">Priority</th><th class="p-3 text-left">Status</th><th class="p-3 text-left">Action</th>
+            </tr></thead>
+            <tbody id="adminComplaintsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="adminClustersPanel" class="hidden">
+        <div class="rounded-2xl bg-gradient-to-r from-[#E8F0EA] to-[#FAF6EC] border border-[#D7E5DA] p-5 mb-4">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/80 border border-[#D7E5DA] text-xs font-bold text-[#1B4332]">🔗 STAGE 2 • SIMILAR REPORTS</div>
+              <h3 class="font-baloo font-bold text-2xl text-[#1B4332] mt-2">Find reports about the same real-world problem</h3>
+              <p class="text-sm text-[#5F685F] max-w-3xl mt-1">Stage 2 compares complaint meaning, location, category, affected resource and other signals. Reports that likely describe one underlying problem are shown together here.</p>
+            </div>
+            <button onclick="loadAdminClusters()" class="touch-target shrink-0 px-4 py-2 rounded-xl bg-[#1B4332] text-white font-bold">↻ Refresh</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <div class="rounded-2xl bg-white border border-[#E8DEC8] p-4">
+            <div class="text-xs font-bold text-[#5F685F]">Similar report groups</div>
+            <div id="stage2GroupCount" class="text-3xl font-baloo font-extrabold text-[#1B4332] mt-1">—</div>
+          </div>
+          <div class="rounded-2xl bg-white border border-[#E8DEC8] p-4">
+            <div class="text-xs font-bold text-[#5F685F]">Reports grouped</div>
+            <div id="stage2GroupedCount" class="text-3xl font-baloo font-extrabold text-[#1B4332] mt-1">—</div>
+          </div>
+          <div class="rounded-2xl bg-white border border-[#E8DEC8] p-4">
+            <div class="text-xs font-bold text-[#5F685F]">Largest group</div>
+            <div id="stage2LargestCount" class="text-3xl font-baloo font-extrabold text-[#E07A24] mt-1">—</div>
+          </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-2 mb-4">
+          <input id="admClusterSearch" oninput="loadAdminClusters()" placeholder="Search similar reports, problem, village…" class="touch-target px-3 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] flex-1">
+          <button onclick="loadAdminClusters()" class="touch-target px-4 rounded-xl border border-[#E8DEC8] bg-white text-[#1B4332] font-bold">Search</button>
+        </div>
+
+        <div id="adminClusterCards" class="grid md:grid-cols-2 gap-4"></div>
+        <div id="adminClusterEmpty" class="hidden rounded-2xl border border-dashed border-[#D9CCB1] bg-[#FCFAF5] p-10 text-center">
+          <div class="text-4xl mb-2">🔎</div>
+          <div class="font-baloo font-bold text-xl text-[#1B4332]">No similar report groups yet</div>
+          <p class="text-sm text-[#5F685F] mt-1">Submit a few complaints describing the same issue. Stage 2 will compare them and place likely matches together here.</p>
+        </div>
+      </div>
+      <div id="adminCitizensPanel" class="hidden">
+        <div class="flex gap-2 mb-3">
+          <input id="admCitizenSearch" oninput="loadAdminCitizens()" placeholder="Search citizen, phone, village…" class="touch-target px-3 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] w-full md:w-96">
+        </div>
+        <div class="overflow-x-auto border border-[#E8DEC8] rounded-xl">
+          <table class="w-full text-sm min-w-[850px]">
+            <thead class="bg-[#F4EEDF] text-[#1B4332]"><tr><th class="p-3 text-left">Citizen</th><th class="p-3 text-left">Phone</th><th class="p-3 text-left">Village</th><th class="p-3 text-left">District</th><th class="p-3 text-left">Role</th><th class="p-3 text-left">Last Login</th></tr></thead>
+            <tbody id="adminCitizensBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="adminDatabasePanel" class="hidden">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="rounded-xl bg-[#FAF6EC] border border-[#E8DEC8] p-4">
+            <div class="text-xs font-bold text-[#5F685F]">SQLite file</div>
+            <div id="admDbPath" class="font-mono text-sm text-[#1B4332] break-all mt-1">—</div>
+            <div id="admDbSize" class="text-sm text-[#5F685F] mt-1">—</div>
+          </div>
+          <div class="rounded-xl bg-[#FAF6EC] border border-[#E8DEC8] p-4">
+            <div class="font-bold text-[#1B4332] mb-2">Tables</div>
+            <div id="admDbTables" class="space-y-1 text-sm"></div>
+          </div>
+        </div>
+        <div class="mt-4 rounded-xl border border-[#E8DEC8] p-4">
+          <div class="font-bold text-[#1B4332] mb-2">Recent admin activity</div>
+          <div id="admAudit" class="space-y-2 text-sm text-[#5F685F]"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- OTP LOGIN MODAL -->
+  <!-- ======================================================== -->
+  <div id="authModal" class="hidden fixed inset-0 z-[60] bg-[#143626]/60 backdrop-blur-sm p-4 flex items-center justify-center">
+    <div class="civic-card w-full max-w-md p-6 sm:p-8 relative">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-[#F4EEDF] text-[#1B4332] font-bold" aria-label="Close login">✕</button>
+
+      <div class="space-y-2 mb-6">
+        <div class="text-sm font-bold text-[#E07A24]">🇮🇳 GramSetu Citizen Login</div>
+        <h2 class="font-baloo font-extrabold text-3xl text-[#1B4332]">Login with your mobile</h2>
+        <p class="text-sm text-[#5F685F]">No password required. We'll verify your mobile number with a one-time password.</p>
+      </div>
+
+      <div id="otp-phone-step" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold text-[#1B4332] mb-1.5">Mobile number</label>
+          <div class="flex">
+            <span class="flex items-center px-3 rounded-l-xl border border-r-0 border-[#E8DEC8] bg-[#F4EEDF] font-bold text-[#5F685F]">+91</span>
+            <input id="auth-phone" type="tel" inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="9876543210" class="touch-target flex-1 px-4 rounded-r-xl border border-[#E8DEC8] bg-[#FCFAF5] outline-none focus:border-[#1B4332]" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1B4332] mb-1.5">Name (for new citizens)</label>
+          <input id="auth-name" type="text" placeholder="Your full name" class="touch-target w-full px-4 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] outline-none focus:border-[#1B4332]" />
+        </div>
+
+        <button id="requestOtpBtn" onclick="requestOTP()" class="touch-target w-full rounded-xl bg-[#1B4332] hover:bg-[#143626] text-white font-bold text-lg">
+          Send OTP
+        </button>
+        <p id="auth-message" class="hidden text-sm rounded-xl p-3 bg-[#E8F0EA] text-[#1B4332]"></p>
+      </div>
+
+      <div id="otp-verify-step" class="hidden space-y-4">
+        <div class="rounded-xl bg-[#E8F0EA] border border-[#1B4332]/20 p-4">
+          <div class="font-bold text-[#1B4332]">OTP sent to <span id="otp-phone-display"></span></div>
+          <div id="dev-otp-hint" class="hidden mt-2 text-sm font-bold text-[#E07A24]"></div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold text-[#1B4332] mb-1.5">6-digit OTP</label>
+          <input id="auth-otp" type="text" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" autocomplete="one-time-code" placeholder="123456" class="touch-target w-full px-4 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] outline-none focus:border-[#1B4332] text-center tracking-[0.5em] text-xl font-bold" />
+        </div>
+
+        <button id="verifyOtpBtn" onclick="verifyOTP()" class="touch-target w-full rounded-xl bg-[#E07A24] hover:bg-[#C96615] text-white font-bold text-lg">
+          Verify & Login
+        </button>
+        <button onclick="backToPhoneStep()" class="w-full py-2 text-sm font-bold text-[#1B4332]">← Use a different number</button>
+        <p id="verify-message" class="hidden text-sm rounded-xl p-3"></p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- MAIN CONTENT AREA -->
+  <!-- ======================================================== -->
+  <main class="flex-1">
+
+    <!-- ====================================================== -->
+    <!-- SCREEN 1: HOME PAGE -->
+    <!-- ====================================================== -->
+    <section id="screen-home" class="space-y-12 pb-16">
+      
+      <!-- Split Hero on Deep Green Gradient -->
+      <div class="relative overflow-hidden bg-gradient-to-br from-[#1B4332] via-[#143626] to-[#0D261A] text-[#FAF6EC] py-12 md:py-16 px-4 border-b border-[#E8DEC8]">
+        <!-- Subtle background pattern accent -->
+        <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(#FAF6EC 1.5px, transparent 1.5px); background-size: 24px 24px;"></div>
+        
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
+          
+          <!-- Hero Left Column -->
+          <div class="lg:col-span-7 space-y-6">
+            <!-- Accent Pill Badge -->
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-sm font-semibold bg-[#E07A24]/20 text-[#F5A25D] border border-[#E07A24]/40">
+              <span class="w-2 h-2 rounded-full bg-[#E07A24] animate-ping"></span>
+              <span>🌾 ग्राम सेतु • आपकी आवाज़, सही दफ़्तर तक</span>
+            </div>
+
+            <!-- Big Headline -->
+            <h1 class="font-baloo font-bold text-3xl sm:text-4xl md:text-5xl leading-[1.18] text-[#FAF6EC] tracking-tight">
+              Report a village problem. <br class="hidden sm:inline">
+              <span class="text-[#F5A25D]">We make sure the right office fixes it.</span>
+            </h1>
+
+            <!-- Supporting Line -->
+            <p class="text-[18px] sm:text-[19px] text-[#E8F0EA]/90 max-w-xl leading-relaxed">
+              No paper files, no running between offices. Speak or write your complaint in simple words. Our AI routes it directly to the responsible Panchayat, PWD, Electricity Board, or Water Department with a fixed deadline.
+            </p>
+
+            <!-- Two Large Rounded CTA Buttons (48px+ min-height) -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+              <!-- Primary CTA: Mustard Orange -->
+              <button onclick="navigateTo('report')" class="touch-target px-7 py-3.5 rounded-full text-[18px] font-bold bg-[#E07A24] hover:bg-[#C96615] text-white shadow-lg shadow-[#E07A24]/25 transition-all text-center flex items-center justify-center gap-2 group">
+                <span>✍️ Report a problem</span>
+                <span class="group-hover:translate-x-1 transition-transform">→</span>
+              </button>
+              
+              <!-- Secondary CTA: Outlined Cream -->
+              <button onclick="navigateTo('track')" class="touch-target px-6 py-3.5 rounded-full text-[17px] font-semibold border-2 border-[#E8F0EA]/40 hover:bg-white/10 text-[#FAF6EC] transition-all text-center flex items-center justify-center gap-2">
+                <span>🔍 Track my complaint</span>
+              </button>
+            </div>
+
+            <!-- Trust Highlights -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-white/15 text-xs sm:text-[14px] text-[#E8F0EA]/80 font-medium">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[#F5A25D] text-base">✓</span> No middlemen or paper forms
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-[#F5A25D] text-base">✓</span> Official photo proof required
+              </div>
+              <div class="flex items-center gap-1.5 col-span-2 sm:col-span-1">
+                <span class="text-[#F5A25D] text-base">✓</span> You confirm before closure
+              </div>
+            </div>
+          </div>
+
+          <!-- Hero Right Column: Rounded photo of Indian village -->
+          <div class="lg:col-span-5 flex justify-center">
+            <div class="relative w-full max-w-md">
+              <div class="rounded-3xl overflow-hidden border-4 border-[#FAF6EC]/20 shadow-2xl bg-[#143626]">
+                <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=700&q=80" alt="Rural Village Scene" class="w-full h-72 sm:h-80 object-cover object-center filter brightness-[0.95]">
+                
+                <!-- Floating Real-Time Routing Badge -->
+                <div class="p-4 bg-[#143626] border-t border-white/10 flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-[#E07A24] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">
+                    ⚡
+                  </div>
+                  <div class="text-xs sm:text-sm">
+                    <div class="font-bold text-[#FAF6EC] font-baloo">Direct SLA Redressal Active</div>
+                    <div class="text-[#E8F0EA]/70">Auto-routes to 8 Village Departments with Enforced Deadlines</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ====================================================== -->
+      <!-- "HOW IT WORKS" (5 Numbered Cards) -->
+      <!-- ====================================================== -->
+      <div class="max-w-6xl mx-auto px-4 space-y-6">
+        <div class="text-center max-w-2xl mx-auto space-y-2">
+          <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#E8F0EA] text-[#1B4332] border border-[#1B4332]/20">
+            Simple 5-Step Process • कैसे काम करता है
+          </span>
+          <h2 class="font-baloo font-bold text-2xl sm:text-3xl text-[#1B4332]">
+            From Village Problem to Verified Resolution
+          </h2>
+          <p class="text-[17px] text-[#5F685F]">
+            GramSetu guarantees zero dropped complaints and ensures officials cannot close complaints without photographic proof.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <!-- Card 1 -->
+          <div class="civic-card p-5 relative flex flex-col justify-between hover:border-[#1B4332] transition">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="w-8 h-8 rounded-full bg-[#1B4332] text-white font-baloo font-bold text-sm flex items-center justify-center">1</span>
+                <span class="text-2xl text-[#E07A24]">✍️</span>
+              </div>
+              <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">You Report</h3>
+              <p class="text-[15px] text-[#5F685F] leading-snug">
+                Speak or write in your dialect. Add photos and tap GPS location.
+              </p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-[#E8DEC8] text-[13px] font-semibold text-[#1B4332]">
+              बोलकर या लिखकर दर्ज करें
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="civic-card p-5 relative flex flex-col justify-between hover:border-[#1B4332] transition">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="w-8 h-8 rounded-full bg-[#1B4332] text-white font-baloo font-bold text-sm flex items-center justify-center">2</span>
+                <span class="text-2xl text-[#E07A24]">🧠</span>
+              </div>
+              <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">AI Understands</h3>
+              <p class="text-[15px] text-[#5F685F] leading-snug">
+                Extracts issue category, calculates urgency, and issues a Complaint ID.
+              </p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-[#E8DEC8] text-[13px] font-semibold text-[#1B4332]">
+              सटीक श्रेणी और समय सीमा
+            </div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="civic-card p-5 relative flex flex-col justify-between hover:border-[#1B4332] transition">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="w-8 h-8 rounded-full bg-[#1B4332] text-white font-baloo font-bold text-sm flex items-center justify-center">3</span>
+                <span class="text-2xl text-[#E07A24]">🏢</span>
+              </div>
+              <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">Right Office</h3>
+              <p class="text-[15px] text-[#5F685F] leading-snug">
+                Instantly dispatched to the exact block officer's docket with SLA timer.
+              </p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-[#E8DEC8] text-[13px] font-semibold text-[#1B4332]">
+              सीधे संबंधित विभाग को
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="civic-card p-5 relative flex flex-col justify-between hover:border-[#1B4332] transition">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="w-8 h-8 rounded-full bg-[#1B4332] text-white font-baloo font-bold text-sm flex items-center justify-center">4</span>
+                <span class="text-2xl text-[#E07A24]">🛠️</span>
+              </div>
+              <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">Official Acts</h3>
+              <p class="text-[15px] text-[#5F685F] leading-snug">
+                Field team conducts repairs and must upload Before & After photo evidence.
+              </p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-[#E8DEC8] text-[13px] font-semibold text-[#1B4332]">
+              मौके पर काम और फोटो सबूत
+            </div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="civic-card p-5 relative flex flex-col justify-between hover:border-[#1B4332] transition bg-[#FAF6EC] border-2 border-[#1B4332]/30">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="w-8 h-8 rounded-full bg-[#E07A24] text-white font-baloo font-bold text-sm flex items-center justify-center">5</span>
+                <span class="text-2xl text-[#1B4332]">🤝</span>
+              </div>
+              <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">You Confirm</h3>
+              <p class="text-[15px] text-[#5F685F] leading-snug">
+                You inspect the proof and verify. If not fixed, it auto-escalates to the Collector.
+              </p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-[#E8DEC8] text-[13px] font-semibold text-[#E07A24]">
+              आपकी संतुष्टि पर ही बंद
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================== -->
+      <!-- "WHERE YOUR COMPLAINT GOES" (Dotted Texture Band) -->
+      <!-- ====================================================== -->
+      <div class="bg-dotted-pattern py-12 px-4 border-y border-[#E8DEC8]">
+        <div class="max-w-6xl mx-auto space-y-8">
+          <div class="text-center max-w-2xl mx-auto space-y-2">
+            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white text-[#1B4332] border border-[#E8DEC8]">
+              Automated Department Routing • विभाग और समय सीमा
+            </span>
+            <h2 class="font-baloo font-bold text-2xl sm:text-3xl text-[#1B4332]">
+              Where Your Complaint Goes & How Fast It Gets Fixed
+            </h2>
+            <p class="text-[17px] text-[#5F685F]">
+              Every category has a legally defined service level agreement (SLA). No file can sit unnoticed.
+            </p>
+          </div>
+
+          <!-- 8 Category Cards Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- 1. Road -->
+            <div class="civic-card p-4 hover:-translate-y-1 transition duration-200">
+              <div class="flex items-start gap-3">
+                <span class="text-3xl p-2 rounded-xl bg-[#F4EEDF] flex-shrink-0">🛣️</span>
+                <div>
+                  <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">Road & Potholes</h3>
+                  <div class="text-xs font-semibold text-[#E07A24] mt-0.5">PWD / Panchayat Authority</div>
+                  <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332]">
+                    ⏱️ 15 Days SLA
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Water -->
+            <div class="civic-card p-4 hover:-translate-y-1 transition duration-200">
+              <div class="flex items-start gap-3">
+                <span class="text-3xl p-2 rounded-xl bg-[#F4EEDF] flex-shrink-0">💧</span>
+                <div>
+                  <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">Drinking Water</h3>
+                  <div class="text-xs font-semibold text-[#E07A24] mt-0.5">Rural Water Supply (Jal Shakti)</div>
+                  <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332]">
+                    ⏱️ 3 Days SLA
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Electricity -->
+            <div class="civic-card p-4 hover:-translate-y-1 transition duration-200">
+              <div class="flex items-start gap-3">
+                <span class="text-3xl p-2 rounded-xl bg-[#F4EEDF] flex-shrink-0">⚡</span>
+                <div>
+                  <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">Electricity</h3>
+                  <div class="text-xs font-semibold text-[#E07A24] mt-0.5">Electricity Dept (DISCOM)</div>
+                  <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332]">
+                    ⏱️ 2 Days SLA
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Sanitation -->
+            <div class="civic-card p-4 hover:-translate-y-1 transition duration-200">
+              <div class="flex items-start gap-3">
+                <span class="text-3xl p-2 rounded-xl bg-[#F4EEDF] flex-shrink-0">🧹</span>
+                <div>
+                  <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">Sanitation</h3>
+                  <div class="text-xs font-semibold text-[#E07A24] mt-0.5">Local Panchayat / Swachh Cell</div>
+                  <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332]">
+                    ⏱️ 7 Days SLA
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Healthcare -->
+            <div class="civic-card p-4 hover:-translate-y-1 transition duration-200">
+              <div class="flex items-start gap-3">
+                <span class="text-3xl p-2 rounded-xl bg-[#F4EEDF] flex-shrink-0">🏥</span>
+                <div>
+                  <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">Healthcare & PHC</h3>
+                  <div class="text-xs font-semibold text-[#E07A24] mt-0.5">District Health Society / CMO</div>
+                  <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332]">
+                    ⏱️ 3 Days SLA
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 6. Agriculture -->
+            <div class="civic-card p-4 hover:-translate-y-1 transition duration-200">
+              <div class="flex items-start gap-3">
+                <span class="text-3xl p-2 rounded-xl bg-[#F4EEDF] flex-shrink-0">🌾</span>
+                <div>
+                  <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">Agriculture</h3>
+                  <div class="text-xs font-semibold text-[#E07A24] mt-0.5">Krishi Vibhag / Irrigation</div>
+                  <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332]">
+                    ⏱️ 10 Days SLA
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 7. Govt Scheme -->
+            <div class="civic-card p-4 hover:-translate-y-1 transition duration-200">
+              <div class="flex items-start gap-3">
+                <span class="text-3xl p-2 rounded-xl bg-[#F4EEDF] flex-shrink-0">📜</span>
+                <div>
+                  <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">Govt Scheme</h3>
+                  <div class="text-xs font-semibold text-[#E07A24] mt-0.5">Collectorate / DBT Cell</div>
+                  <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332]">
+                    ⏱️ 21 Days SLA
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 8. Other -->
+            <div class="civic-card p-4 hover:-translate-y-1 transition duration-200">
+              <div class="flex items-start gap-3">
+                <span class="text-3xl p-2 rounded-xl bg-[#F4EEDF] flex-shrink-0">📌</span>
+                <div>
+                  <h3 class="font-baloo font-bold text-lg text-[#1B4332] leading-tight">Other Issues</h3>
+                  <div class="text-xs font-semibold text-[#E07A24] mt-0.5">Gram Panchayat / BDO Office</div>
+                  <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332]">
+                    ⏱️ 14 Days SLA
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Action in Section -->
+          <div class="text-center pt-2">
+            <button onclick="navigateTo('report')" class="touch-target px-8 py-3.5 rounded-full text-[17px] font-bold bg-[#1B4332] hover:bg-[#143626] text-white shadow-md transition inline-flex items-center gap-2">
+              <span>Have a problem in your village? Report it now</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- SCREEN 2: REPORT COMPLAINT -->
+    <!-- ====================================================== -->
+    <section id="screen-report" class="hidden py-8 px-4 max-w-3xl mx-auto space-y-6">
+      
+      <!-- Section Header -->
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332] border border-[#1B4332]/20">
+          <span>✍️ Register Grievance • नई शिकायत दर्ज करें</span>
+        </div>
+        <h1 class="font-baloo font-bold text-2xl sm:text-3xl text-[#1B4332]">
+          Report a Village Problem
+        </h1>
+        <p class="text-[17px] text-[#5F685F]">
+          Fill in the 3 simple steps below. Our AI will understand the issue, route it to the right department, and assign an official with a strict deadline.
+        </p>
+      </div>
+
+      <!-- FORM VIEW -->
+      <div id="report-form-container" class="space-y-6">
+        <form id="reportForm" onsubmit="handleReportSubmit(event)" class="space-y-6">
+          
+          <!-- FIELDSET 1: YOUR DETAILS -->
+          <div class="civic-card p-5 sm:p-7 space-y-4">
+            <div class="flex items-center gap-3 pb-3 border-b border-[#E8DEC8]">
+              <div class="w-8 h-8 rounded-full bg-[#1B4332] text-white font-baloo font-bold text-sm flex items-center justify-center flex-shrink-0">
+                1
+              </div>
+              <div>
+                <h2 class="font-baloo font-bold text-xl text-[#1B4332] leading-tight">Your Details (आपकी जानकारी)</h2>
+                <p class="text-xs text-[#5F685F]">We need this to notify you on SMS & WhatsApp about the progress.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Name -->
+              <div>
+                <label class="block text-sm font-semibold text-[#1B4332] mb-1.5">Full Name (पूरा नाम) *</label>
+                <input id="repName" type="text" required placeholder="e.g., Rameshwar Patel" class="touch-target w-full px-4 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] focus:bg-white focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 outline-none text-[#242A24] text-[16px] transition" value="Rameshwar Patel">
+              </div>
+
+              <!-- 10-digit Mobile -->
+              <div>
+                <label class="block text-sm font-semibold text-[#1B4332] mb-1.5">10-Digit Mobile Number (मोबाइल नंबर) *</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold text-[#5F685F]">
+                    🇮🇳 +91
+                  </div>
+                  <input id="repPhone" type="tel" pattern="[0-9]{10}" required placeholder="9876543210" class="touch-target w-full pl-14 pr-4 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] focus:bg-white focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 outline-none text-[#242A24] text-[16px] transition" value="9876543210">
+                </div>
+              </div>
+
+              <!-- Village -->
+              <div>
+                <label class="block text-sm font-semibold text-[#1B4332] mb-1.5">Village / Gram Panchayat (गांव / पंचायत) *</label>
+                <input id="repVillage" type="text" required placeholder="e.g., Rampur Kalan, Ward 4" class="touch-target w-full px-4 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] focus:bg-white focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 outline-none text-[#242A24] text-[16px] transition" value="Rampur Kalan (Ward 4)">
+              </div>
+
+              <!-- District -->
+              <div>
+                <label class="block text-sm font-semibold text-[#1B4332] mb-1.5">District (जिला) *</label>
+                <select id="repDistrict" class="touch-target w-full px-4 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] focus:bg-white focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 outline-none text-[#242A24] text-[16px] transition">
+                  <option value="Varanasi">Varanasi (वाराणसी)</option>
+                  <option value="Satara">Satara (सातारा)</option>
+                  <option value="Jaipur Rural">Jaipur Rural (जयपुर ग्रामीण)</option>
+                  <option value="Patna Rural">Patna Rural (पटना)</option>
+                  <option value="Coimbatore">Coimbatore (कोयंबटूर)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- FIELDSET 2: WHAT IS THE PROBLEM? -->
+          <div class="civic-card p-5 sm:p-7 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-[#E8DEC8]">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-[#1B4332] text-white font-baloo font-bold text-sm flex items-center justify-center flex-shrink-0">
+                  2
+                </div>
+                <div>
+                  <h2 class="font-baloo font-bold text-xl text-[#1B4332] leading-tight">What is the Problem? (समस्या क्या है?)</h2>
+                  <p class="text-xs text-[#5F685F]">Explain in your own words. Write or tap to speak.</p>
+                </div>
+              </div>
+
+              <!-- Voice Button Simulation -->
+              <button type="button" id="repVoiceBtn" onclick="toggleVoiceInput()" class="touch-target px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332] hover:bg-[#1B4332] hover:text-white border border-[#1B4332]/20 transition flex items-center gap-1.5">
+                <span id="voice-icon">🎙️</span>
+                <span id="voice-text">बोलकर लिखें (Voice)</span>
+              </button>
+            </div>
+
+            <!-- Quick sample preset chips for rapid testing -->
+            <div class="space-y-1.5">
+              <span class="text-xs font-semibold text-[#5F685F]">💡 Quick examples (click to autofill):</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="setPreset('transformer')" class="text-xs px-3 py-1 rounded-full bg-[#FAF6EC] hover:bg-[#E8F0EA] text-[#1B4332] border border-[#E8DEC8] font-medium transition">
+                  ⚡ Burnt Transformer
+                </button>
+                <button type="button" onclick="setPreset('water')" class="text-xs px-3 py-1 rounded-full bg-[#FAF6EC] hover:bg-[#E8F0EA] text-[#1B4332] border border-[#E8DEC8] font-medium transition">
+                  💧 Broken Pipeline
+                </button>
+                <button type="button" onclick="setPreset('road')" class="text-xs px-3 py-1 rounded-full bg-[#FAF6EC] hover:bg-[#E8F0EA] text-[#1B4332] border border-[#E8DEC8] font-medium transition">
+                  🛣️ Road Potholes
+                </button>
+                <button type="button" onclick="setPreset('sanitation')" class="text-xs px-3 py-1 rounded-full bg-[#FAF6EC] hover:bg-[#E8F0EA] text-[#1B4332] border border-[#E8DEC8] font-medium transition">
+                  🧹 Blocked Drain
+                </button>
+              </div>
+            </div>
+
+            <!-- Problem Description Textarea -->
+            <div>
+              <textarea id="repDesc" rows="4" required placeholder="Describe the problem simply. E.g.: 'The drinking water pipeline near the primary school broke 2 days ago, dirty water is mixing in and 80 families have no clean water.' You can also write in Hindi or Hinglish." class="w-full p-4 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] focus:bg-white focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 outline-none text-[#242A24] text-[16px] leading-relaxed transition">हमारे गांव रामपुर कलां में मेन ट्रांसफार्मर 3 दिन से जल गया है। पूरे वार्ड 4 में बिजली गुल है और पानी की मोटर भी नहीं चल रही है। परीक्षा के समय बच्चों की पढ़ाई रुक गई है।</textarea>
+            </div>
+
+            <!-- Photo/Video Uploader (Dashed drop tile) -->
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold text-[#1B4332]">Photo / Video Evidence (फोटो या वीडियो सबूत)</label>
+              
+              <!-- Dashed Tile -->
+              <div class="relative border-2 border-dashed border-[#D6C9B0] hover:border-[#1B4332] rounded-2xl p-5 bg-[#FAF6EC]/60 text-center cursor-pointer transition">
+                <input type="file" id="repPhotoInput" accept="image/*,video/*" capture="environment" onchange="handleFileSelect(event)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                <div class="space-y-1 pointer-events-none">
+                  <div class="text-3xl">📸</div>
+                  <div class="font-baloo font-bold text-base text-[#1B4332]">Take photo / choose file</div>
+                  <p class="text-xs text-[#5F685F]">Max 4 files • Mobile camera opens directly</p>
+                </div>
+              </div>
+
+              <!-- Thumbnails Grid -->
+              <div id="photoThumbGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                <!-- Preloaded active sample photo -->
+                <div id="thumb-1" class="relative group rounded-xl overflow-hidden border border-[#E8DEC8] bg-white shadow-sm">
+                  <img id="thumb-img-1" src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80" alt="Evidence" class="w-full h-24 object-cover">
+                  <button type="button" onclick="removePhoto()" class="absolute top-1 right-1 w-6 h-6 rounded-full bg-red-600 text-white text-xs flex items-center justify-center font-bold shadow hover:bg-red-700">✕</button>
+                  <div class="p-1 text-[11px] text-[#5F685F] truncate text-center">transformer_burn.jpg</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- FIELDSET 3: WHERE IS IT? -->
+          <div class="civic-card p-5 sm:p-7 space-y-4">
+            <div class="flex items-center gap-3 pb-3 border-b border-[#E8DEC8]">
+              <div class="w-8 h-8 rounded-full bg-[#1B4332] text-white font-baloo font-bold text-sm flex items-center justify-center flex-shrink-0">
+                3
+              </div>
+              <div>
+                <h2 class="font-baloo font-bold text-xl text-[#1B4332] leading-tight">Where is it? (समस्या का स्थान)</h2>
+                <p class="text-xs text-[#5F685F]">Helps the field officer locate the exact spot in your village.</p>
+              </div>
+            </div>
+
+            <!-- Geolocation Button -->
+            <div>
+              <button type="button" onclick="captureGPSLocation()" class="touch-target w-full px-5 py-3 rounded-xl border-2 border-[#1B4332] bg-[#E8F0EA] hover:bg-[#1B4332] text-[#1B4332] hover:text-white font-baloo font-bold text-[16px] transition flex items-center justify-center gap-2 group">
+                <span class="text-xl">📍</span>
+                <span id="gps-button-label">Use my current location (GPS)</span>
+              </button>
+              
+              <!-- Location pill info -->
+              <div id="gps-status-pill" class="mt-2 p-2.5 rounded-lg bg-[#FCFAF5] border border-[#E8DEC8] flex items-center justify-between text-xs text-[#1B4332]">
+                <div class="flex items-center gap-1.5 font-medium">
+                  <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+                  <span id="gps-display-text">GPS Captured: 25.3176° N, 82.9739° E (Accuracy: ± 4m)</span>
+                </div>
+                <span class="text-[11px] text-[#5F685F]">Auto-attached</span>
+              </div>
+            </div>
+
+            <!-- Landmark field -->
+            <div>
+              <label class="block text-sm font-semibold text-[#1B4332] mb-1.5">Nearby Landmark (आस-पास की पहचान)</label>
+              <input id="repLandmark" type="text" placeholder="e.g. Near Primary School Gate, opposite Banyan tree, Ward No. 4" class="touch-target w-full px-4 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] focus:bg-white focus:border-[#1B4332] focus:ring-2 focus:ring-[#1B4332]/10 outline-none text-[#242A24] text-[16px] transition" value="Near Primary School Gate, Ward No. 4">
+            </div>
+          </div>
+
+
+          <!-- SUBMIT BUTTON WITH SPINNER STATE -->
+          <div class="pt-2">
+            <button type="submit" id="submitGrievanceBtn" class="touch-target w-full py-4 px-6 rounded-2xl bg-[#E07A24] hover:bg-[#C96615] text-white font-baloo font-bold text-xl shadow-lg shadow-[#E07A24]/30 transition-all flex items-center justify-center gap-3">
+              <span id="btn-submit-icon">🚀</span>
+              <span id="btn-submit-text">Submit Complaint to GramSetu</span>
+            </button>
+            <p class="text-center text-xs text-[#5F685F] mt-2">
+              By submitting, your complaint is automatically routed to the right authority with a mandated resolution deadline.
+            </p>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- SUCCESS SCREEN (Shown after submission) -->
+      <div id="report-success-container" class="hidden civic-card p-6 sm:p-8 space-y-6 text-center">
+        <!-- Big green checkmark -->
+        <div class="w-20 h-20 rounded-full bg-[#E8F0EA] text-[#1B4332] border-2 border-[#1B4332] flex items-center justify-center text-4xl mx-auto shadow-sm">
+          ✓
+        </div>
+
+        <div class="space-y-1">
+          <h2 class="font-baloo font-bold text-2xl sm:text-3xl text-[#1B4332]">
+            Complaint Registered Successfully!
+          </h2>
+          <p class="text-[17px] text-[#5F685F]">
+            आपकी शिकायत सफलतापूर्वक दर्ज हो गई है। संबंधित अधिकारी को सूचित कर दिया गया है।
+          </p>
+        </div>
+
+        <!-- Large dashed-border copy chip for Complaint ID -->
+        <div class="p-4 sm:p-5 rounded-2xl border-2 border-dashed border-[#1B4332] bg-[#FAF6EC] inline-flex flex-col sm:flex-row items-center justify-between gap-3 w-full max-w-md mx-auto">
+          <div class="text-left">
+            <div class="text-xs font-bold uppercase tracking-wider text-[#5F685F]">Your Complaint ID</div>
+            <div class="font-baloo font-extrabold text-2xl sm:text-3xl text-[#1B4332] tracking-wider" id="succ-complaint-id">
+              GRV-2026-004821
+            </div>
+          </div>
+          <button onclick="copyComplaintId()" class="touch-target px-4 py-2 rounded-xl bg-[#1B4332] hover:bg-[#143626] text-white text-sm font-semibold transition flex items-center gap-1.5 shadow-sm">
+            <span>📋</span>
+            <span>Copy ID</span>
+          </button>
+        </div>
+
+        <!-- Summary Panel -->
+        <div class="civic-card p-5 text-left space-y-3 bg-[#FCFAF5]">
+          <h3 class="font-baloo font-bold text-lg text-[#1B4332] border-b border-[#E8DEC8] pb-2">
+            AI Triage & Routing Summary
+          </h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+            <div>
+              <span class="text-[#5F685F] block text-xs">Problem Category:</span>
+              <span class="font-bold text-[#1B4332] text-base" id="succ-category">⚡ Electricity (बिजली विभाग)</span>
+            </div>
+            <div>
+              <span class="text-[#5F685F] block text-xs">Action Deadline (SLA):</span>
+              <span class="font-bold text-[#E07A24] text-base" id="succ-sla">⏱️ Within 2 Days (Oct 4, 2026)</span>
+            </div>
+            <div class="sm:col-span-2">
+              <span class="text-[#5F685F] block text-xs">Auto-Routed To Department:</span>
+              <span class="font-bold text-[#1B4332]" id="succ-dept">State Electricity Distribution Company (DISCOM) - Sevapuri Substation</span>
+            </div>
+            <div class="sm:col-span-2">
+              <span class="text-[#5F685F] block text-xs">AI Extraction Note:</span>
+              <p class="text-xs text-[#5F685F] mt-0.5 leading-relaxed" id="succ-notes">
+                Burnt 25kVA transformer unit affecting Ward 4 drinking water pump and households. Ticket prioritized for urgent replacement.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <button onclick="trackRegisteredComplaint()" class="touch-target w-full sm:w-auto px-7 py-3 rounded-full bg-[#E07A24] hover:bg-[#C96615] text-white font-baloo font-bold text-lg shadow-md transition">
+            🔍 Track this complaint now
+          </button>
+          <button onclick="resetReportForm()" class="touch-target w-full sm:w-auto px-6 py-3 rounded-full border border-[#E8DEC8] bg-white hover:bg-[#F4EEDF] text-[#1B4332] font-semibold text-[16px] transition">
+            ✍️ Report another problem
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- SCREEN 3: TRACK COMPLAINT -->
+    <!-- ====================================================== -->
+    <section id="screen-track" class="hidden py-8 px-4 max-w-4xl mx-auto space-y-6">
+      
+      <!-- Section Header -->
+      <div class="space-y-1">
+        <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332] border border-[#1B4332]/20">
+          <span>🔍 Live Tracking • शिकायत की स्थिति जांचें</span>
+        </div>
+        <h1 class="font-baloo font-bold text-2xl sm:text-3xl text-[#1B4332]">
+          Track Your Village Complaint
+        </h1>
+        <p class="text-[17px] text-[#5F685F]">
+          See who is handling your grievance, view field inspection progress, and review before/after proof.
+        </p>
+      </div>
+
+      <!-- SEARCH CARD (Complaint ID + Mobile) -->
+      <div class="civic-card p-5 sm:p-6 space-y-4">
+        <form onsubmit="handleTrackSearch(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+          <div class="sm:col-span-6">
+            <label class="block text-sm font-semibold text-[#1B4332] mb-1.5">Complaint ID (शिकायत संख्या)</label>
+            <input id="trackIdInput" type="text" placeholder="e.g. GRV-2026-004821" value="GRV-2026-004821" class="touch-target w-full px-4 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] focus:bg-white focus:border-[#1B4332] outline-none text-[#242A24] font-medium text-[16px] transition uppercase">
+          </div>
+          <div class="sm:col-span-4">
+            <label class="block text-sm font-semibold text-[#1B4332] mb-1.5">10-Digit Mobile (मोबाइल नंबर)</label>
+            <input id="trackPhoneInput" type="tel" placeholder="e.g. 9876543210" value="9876543210" class="touch-target w-full px-4 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] focus:bg-white focus:border-[#1B4332] outline-none text-[#242A24] text-[16px] transition">
+          </div>
+          <div class="sm:col-span-2">
+            <button type="submit" class="touch-target w-full py-3 px-4 rounded-xl bg-[#1B4332] hover:bg-[#143626] text-white font-baloo font-bold text-base shadow-sm transition flex items-center justify-center gap-1.5">
+              <span>🔍</span>
+              <span>Check</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Preloaded sample chips -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-[#E8DEC8] text-xs">
+          <span class="text-[#5F685F] font-semibold">Try sample tickets:</span>
+          <button type="button" onclick="loadSampleTicket('GRV-2026-004821')" class="px-2.5 py-1 rounded-full bg-[#FAF6EC] hover:bg-[#E8F0EA] border border-[#E8DEC8] font-medium text-[#1B4332]">
+            ⚡ GRV-2026-004821 (Electricity - In Progress)
+          </button>
+          <button type="button" onclick="loadSampleTicket('GRV-2026-003912')" class="px-2.5 py-1 rounded-full bg-[#FAF6EC] hover:bg-[#E8F0EA] border border-[#E8DEC8] font-medium text-[#1B4332]">
+            💧 GRV-2026-003912 (Water - Resolved / Needs Confirmation)
+          </button>
+          <button type="button" onclick="loadSampleTicket('GRV-2026-002150')" class="px-2.5 py-1 rounded-full bg-[#FAF6EC] hover:bg-[#E8F0EA] border border-[#E8DEC8] font-medium text-[#1B4332]">
+            🛣️ GRV-2026-002150 (Road - Confirmed Closed)
+          </button>
+        </div>
+      </div>
+
+      <!-- RESULT VIEW CARD -->
+      <div id="trackResultView" class="space-y-6">
+        
+        <!-- Header Info Card -->
+        <div class="civic-card p-5 sm:p-7 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#E8DEC8] gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-baloo font-extrabold text-2xl sm:text-3xl text-[#1B4332]" id="trkResultId">GRV-2026-004821</span>
+                <span id="trkStatusBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-[#E07A24]/15 text-[#E07A24] border border-[#E07A24]/30">
+                  ⚙️ In Progress
+                </span>
+              </div>
+              <p class="text-sm text-[#5F685F] mt-1" id="trkMetaSubtitle">
+                Filed by Rameshwar Patel • Rampur Kalan (Ward 4), Varanasi
+              </p>
+            </div>
+
+            <!-- Deadline Note -->
+            <div class="p-3 rounded-xl bg-[#FAF6EC] border border-[#E8DEC8] text-right">
+              <div class="text-xs text-[#5F685F] font-semibold">Mandated Resolution SLA</div>
+              <div class="text-sm font-bold text-[#E07A24]" id="trkDeadlineNote">⏱️ Due in 14 hours (Oct 4, 2026)</div>
+            </div>
+          </div>
+
+          <!-- HORIZONTAL 5-STEP STATUS TIMELINE -->
+          <div class="space-y-2">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-[#5F685F]">
+              5-Step Redressal Progress (प्रगति की स्थिति)
+            </h3>
+            
+            <div class="relative pt-3 pb-1">
+              <!-- Background connector line -->
+              <div class="hidden md:block absolute top-7 left-8 right-8 h-1 bg-[#E8DEC8] -z-0"></div>
+
+              <div class="grid grid-cols-1 md:grid-cols-5 gap-3 relative z-10" id="fiveStepContainer">
+                <!-- Step 1: Submitted -->
+                <div class="flex md:flex-col items-center md:text-center gap-3 md:gap-2">
+                  <div class="w-9 h-9 rounded-full bg-[#1B4332] text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0">
+                    ✓
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-[#1B4332]">1. Submitted</div>
+                    <div class="text-[11px] text-[#5F685F]">Registered</div>
+                  </div>
+                </div>
+
+                <!-- Step 2: Received -->
+                <div class="flex md:flex-col items-center md:text-center gap-3 md:gap-2">
+                  <div class="w-9 h-9 rounded-full bg-[#1B4332] text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0">
+                    ✓
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-[#1B4332]">2. Received</div>
+                    <div class="text-[11px] text-[#5F685F]">AI Categorized</div>
+                  </div>
+                </div>
+
+                <!-- Step 3: Assigned -->
+                <div class="flex md:flex-col items-center md:text-center gap-3 md:gap-2">
+                  <div class="w-9 h-9 rounded-full bg-[#1B4332] text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0">
+                    ✓
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-[#1B4332]">3. Assigned</div>
+                    <div class="text-[11px] text-[#5F685F]">Officer Designated</div>
+                  </div>
+                </div>
+
+                <!-- Step 4: In Progress -->
+                <div class="flex md:flex-col items-center md:text-center gap-3 md:gap-2">
+                  <div id="step4-icon" class="w-9 h-9 rounded-full bg-[#E07A24] text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0 pulse-glow">
+                    ⚙️
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-[#E07A24]" id="step4-title">4. In Progress</div>
+                    <div class="text-[11px] text-[#5F685F]">Field Crew on site</div>
+                  </div>
+                </div>
+
+                <!-- Step 5: Resolved -->
+                <div class="flex md:flex-col items-center md:text-center gap-3 md:gap-2">
+                  <div id="step5-icon" class="w-9 h-9 rounded-full bg-[#FAF6EC] border-2 border-[#E8DEC8] text-[#5F685F] flex items-center justify-center font-bold text-sm flex-shrink-0">
+                    5
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold text-[#5F685F]" id="step5-title">5. Resolved</div>
+                    <div class="text-[11px] text-[#5F685F]">Awaiting Proof</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- =================================================== -->
+          <!-- CONFIRMATION CARD (When Status == Resolved) -->
+          <!-- =================================================== -->
+          <div id="trkCitizenConfirmationCard" class="hidden p-5 sm:p-6 rounded-2xl bg-[#E8F0EA] border-2 border-[#1B4332] space-y-4">
+            <div class="flex items-start gap-3">
+              <span class="text-3xl">🤝</span>
+              <div>
+                <h4 class="font-baloo font-bold text-xl text-[#1B4332]">
+                  Is the problem really fixed? (क्या समस्या वाकई ठीक हो गई है?)
+                </h4>
+                <p class="text-sm text-[#242A24] mt-0.5 leading-relaxed">
+                  The official has uploaded the work completion photos below. Please inspect them and confirm if the work was done to your satisfaction.
+                </p>
+              </div>
+            </div>
+
+            <!-- Optional Feedback text -->
+            <div>
+              <input id="citizenFeedbackNotes" type="text" placeholder="Optional: Add a comment or note for the Panchayat record..." class="touch-target w-full px-4 rounded-xl border border-[#1B4332]/30 bg-white text-sm outline-none">
+            </div>
+
+            <!-- Yes / No Buttons -->
+            <div class="flex flex-col sm:flex-row items-center gap-3 pt-1">
+              <button onclick="confirmResolutionYes()" class="touch-target w-full sm:w-auto px-6 py-3 rounded-full bg-[#1B4332] hover:bg-[#143626] text-white font-baloo font-bold text-base shadow-sm transition flex items-center justify-center gap-2">
+                <span>✓ Yes, problem is fixed!</span>
+              </button>
+              <button onclick="confirmResolutionNo()" class="touch-target w-full sm:w-auto px-6 py-3 rounded-full bg-red-600 hover:bg-red-700 text-white font-baloo font-bold text-base shadow-sm transition flex items-center justify-center gap-2">
+                <span>✕ Not fixed (Reopen & Escalate)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Closed banner when verified -->
+          <div id="trkClosedBanner" class="hidden p-4 rounded-2xl bg-[#E8F0EA] border border-[#1B4332]/30 text-center space-y-1">
+            <div class="text-[#1B4332] font-baloo font-bold text-lg">🎉 Verified & Closed by Citizen</div>
+            <p class="text-xs text-[#5F685F]">Citizen confirmed resolution on Oct 2, 2026. Graded 5/5 ⭐ satisfaction.</p>
+          </div>
+
+
+          <!-- =================================================== -->
+          <!-- PROOF OF RESOLUTION (Before & After Photo Grids) -->
+          <!-- =================================================== -->
+          <div id="trkProofSection" class="space-y-4 pt-4 border-t border-[#E8DEC8]">
+            <div>
+              <h4 class="font-baloo font-bold text-xl text-[#1B4332] flex items-center gap-2">
+                <span>📸 Proof of Resolution (कार्य का प्रमाण)</span>
+                <span class="text-xs font-normal px-2.5 py-0.5 rounded-full bg-[#FAF6EC] text-[#5F685F] border border-[#E8DEC8]">Official Evidence</span>
+              </h4>
+              <p class="text-xs text-[#5F685F]">Side-by-side photographic verification recorded on site by the field official.</p>
+            </div>
+
+            <!-- Before & After Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Before Photo -->
+              <div class="civic-card p-3 bg-[#FCFAF5]">
+                <div class="flex items-center justify-between text-xs font-bold text-red-700 mb-2">
+                  <span>🔴 BEFORE (Citizen Complaint)</span>
+                  <span class="text-[#5F685F] font-normal" id="proofBeforeDate">Oct 1</span>
+                </div>
+                <img id="proofBeforeImg" src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80" alt="Before Evidence" class="w-full h-44 object-cover rounded-xl border border-[#E8DEC8]">
+                <p class="text-xs text-[#5F685F] mt-2 italic" id="proofBeforeCaption">
+                  Burnt 25kVA transformer unit with ruptured coil
+                </p>
+              </div>
+
+              <!-- After Photo -->
+              <div class="civic-card p-3 bg-[#FCFAF5]">
+                <div class="flex items-center justify-between text-xs font-bold text-[#1B4332] mb-2">
+                  <span>🟢 AFTER (Official Repair Proof)</span>
+                  <span class="text-[#5F685F] font-normal" id="proofAfterDate">Oct 2, 02:40 PM</span>
+                </div>
+                <img id="proofAfterImg" src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=600&q=80" alt="After Evidence" class="w-full h-44 object-cover rounded-xl border border-[#E8DEC8]">
+                <p class="text-xs text-[#5F685F] mt-2 italic" id="proofAfterCaption">
+                  Brand new 63kVA copper-wound unit energized and tested
+                </p>
+              </div>
+            </div>
+
+            <!-- Action Taken Notes -->
+            <div class="p-4 rounded-xl bg-[#FCFAF5] border border-[#E8DEC8] text-sm space-y-1">
+              <span class="font-bold text-[#1B4332]">Official Action Taken Log:</span>
+              <p class="text-[#5F685F] leading-relaxed" id="proofActionNotes">
+                "Replaced burnt unit with heavy capacity 63 kVA transformer. Phase voltages verified (230V balanced). Water booster pump restored in Ward 4. Verified on-site by JE Er. R. Sharma in presence of village sarpanch."
+              </p>
+            </div>
+          </div>
+
+
+          <!-- =================================================== -->
+          <!-- ORIGINAL COMPLAINT DETAILS -->
+          <!-- =================================================== -->
+          <div class="space-y-2 pt-4 border-t border-[#E8DEC8]">
+            <h4 class="font-baloo font-bold text-lg text-[#1B4332]">Original Complaint Details</h4>
+            <div class="p-4 rounded-xl bg-[#FAF6EC] border border-[#E8DEC8] text-sm space-y-2">
+              <p class="text-[#242A24] leading-relaxed" id="trkOriginalDesc">
+                हमारे गांव रामपुर कलां में मेन ट्रांसफार्मर 3 दिन से जल गया है। पूरे वार्ड 4 में बिजली गुल है और पानी की मोटर भी नहीं चल रही है।
+              </p>
+              <div class="flex flex-wrap gap-4 text-xs text-[#5F685F] pt-2 border-t border-[#E8DEC8]">
+                <div><span class="font-semibold text-[#1B4332]">Department:</span> <span id="trkDeptName">State Electricity Distribution Company</span></div>
+                <div><span class="font-semibold text-[#1B4332]">Assigned Officer:</span> <span id="trkOfficerName">Er. R. Sharma (Junior Engineer)</span></div>
+                <div><span class="font-semibold text-[#1B4332]">Landmark:</span> Near Primary School Gate, Ward 4</div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- =================================================== -->
+          <!-- VERTICAL HISTORY TIMELINE -->
+          <!-- =================================================== -->
+          <div class="space-y-3 pt-4 border-t border-[#E8DEC8]">
+            <h4 class="font-baloo font-bold text-lg text-[#1B4332]">Activity Log & Audit Trail</h4>
+            
+            <div class="relative pl-6 space-y-4 border-l-2 border-[#E8DEC8] ml-2 text-xs sm:text-sm">
+              <div class="relative">
+                <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-[#1B4332] border-2 border-white"></span>
+                <div class="font-bold text-[#1B4332]">Complaint Registered by Citizen</div>
+                <div class="text-[#5F685F]">Oct 2, 09:15 AM • Captured GPS (25.3176° N, 82.9739° E)</div>
+              </div>
+
+              <div class="relative">
+                <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-[#1B4332] border-2 border-white"></span>
+                <div class="font-bold text-[#1B4332]">AI Categorized & Dispatched</div>
+                <div class="text-[#5F685F]">Oct 2, 09:16 AM • Category: Electricity • Mandated 48h SLA</div>
+              </div>
+
+              <div class="relative">
+                <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-[#1B4332] border-2 border-white"></span>
+                <div class="font-bold text-[#1B4332]">Assigned to Field Officer</div>
+                <div class="text-[#5F685F]">Oct 2, 10:45 AM • Er. R. Sharma (Junior Engineer, Sevapuri)</div>
+              </div>
+
+              <div class="relative">
+                <span class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-[#E07A24] border-2 border-white"></span>
+                <div class="font-bold text-[#E07A24]">Work Order Initiated</div>
+                <div class="text-[#5F685F]">Oct 2, 01:20 PM • Field crew dispatched with replacement unit</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ====================================================== -->
+    <!-- SCREEN 4: OFFICIALS DASHBOARD -->
+    <!-- ====================================================== -->
+    <section id="screen-officials" class="hidden py-8 px-4 max-w-6xl mx-auto space-y-6">
+      
+      <!-- Officials Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332] border border-[#1B4332]/20">
+            <span>🏛️ Official Administration Console • अधिकारी पोर्टल</span>
+          </div>
+          <h1 class="font-baloo font-bold text-2xl sm:text-3xl text-[#1B4332]">
+            GramSetu Redressal Docket
+          </h1>
+          <p class="text-[17px] text-[#5F685F]">
+            Review AI-routed complaints, dispatch field crews, and upload mandatory Before/After photo evidence to close tickets.
+          </p>
+        </div>
+
+        <!-- Role badge -->
+        <div class="flex items-center gap-2 p-2 rounded-xl bg-white border border-[#E8DEC8]">
+          <span class="text-xl">👮‍♂️</span>
+          <div class="text-xs leading-tight">
+            <div class="font-bold text-[#1B4332]">Er. R. Sharma (JE)</div>
+            <div class="text-[#5F685F]">Sevapuri Substation, Varanasi</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="civic-card p-4">
+          <div class="text-xs font-bold text-[#5F685F]">Total Assigned</div>
+          <div class="text-2xl font-baloo font-extrabold text-[#1B4332]" id="off-count-total">5</div>
+        </div>
+        <div class="civic-card p-4">
+          <div class="text-xs font-bold text-[#E07A24]">In Progress</div>
+          <div class="text-2xl font-baloo font-extrabold text-[#E07A24]" id="off-count-prog">2</div>
+        </div>
+        <div class="civic-card p-4">
+          <div class="text-xs font-bold text-emerald-700">Awaiting Citizen</div>
+          <div class="text-2xl font-baloo font-extrabold text-emerald-700" id="off-count-res">1</div>
+        </div>
+        <div class="civic-card p-4">
+          <div class="text-xs font-bold text-[#1B4332]">Verified Closed</div>
+          <div class="text-2xl font-baloo font-extrabold text-[#1B4332]" id="off-count-closed">1</div>
+        </div>
+      </div>
+
+      <!-- Filters Strip -->
+      <div class="civic-card p-4 flex flex-wrap items-center justify-between gap-3 text-sm">
+        <div class="flex items-center gap-2">
+          <span class="font-semibold text-[#1B4332]">Department:</span>
+          <select id="offDeptFilter" onchange="renderOfficialGrid()" class="touch-target px-3 rounded-lg border border-[#E8DEC8] bg-[#FAF6EC] font-semibold text-xs outline-none">
+            <option value="ALL">🏢 All Departments</option>
+            <option value="Electricity">⚡ Electricity (DISCOM)</option>
+            <option value="Water">💧 Water (Jal Shakti)</option>
+            <option value="Roads">🛣️ Roads (PWD)</option>
+            <option value="Sanitation">🧹 Sanitation (Panchayat)</option>
+          </select>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-[#5F685F]">Status:</span>
+          <button onclick="filterOffStatus('ALL')" class="off-filter-pill px-3 py-1 rounded-full bg-[#1B4332] text-white font-bold">All</button>
+          <button onclick="filterOffStatus('New')" class="off-filter-pill px-3 py-1 rounded-full bg-[#FAF6EC] border border-[#E8DEC8] text-[#1B4332]">New</button>
+          <button onclick="filterOffStatus('In Progress')" class="off-filter-pill px-3 py-1 rounded-full bg-[#FAF6EC] border border-[#E8DEC8] text-[#1B4332]">In Progress</button>
+          <button onclick="filterOffStatus('Resolved')" class="off-filter-pill px-3 py-1 rounded-full bg-[#FAF6EC] border border-[#E8DEC8] text-[#1B4332]">Resolved</button>
+        </div>
+      </div>
+
+      <!-- Official Complaints Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="officialCardGrid">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ======================================================== -->
+  <!-- MODAL: OFFICIAL ACTION & PROOF RESOLUTION -->
+  <!-- ======================================================== -->
+  <div id="officialActionModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="civic-card max-w-xl w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-3 border-b border-[#E8DEC8]">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-baloo font-bold text-xl text-[#1B4332]" id="modalGid">GRV-2026-004821</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-[#E07A24]/15 text-[#E07A24] font-bold" id="modalBadge">In Progress</span>
+          </div>
+          <div class="text-xs text-[#5F685F]" id="modalVillage">Village: Rampur Kalan, Sevapuri Block</div>
+        </div>
+        <button onclick="closeOfficialModal()" class="w-8 h-8 rounded-full bg-[#FAF6EC] hover:bg-[#E8DEC8] text-base font-bold flex items-center justify-center text-[#1B4332]">✕</button>
+      </div>
+
+      <!-- Complaint Info -->
+      <div class="p-3 rounded-xl bg-[#FAF6EC] text-xs space-y-1.5 border border-[#E8DEC8]">
+        <div class="font-bold text-[#1B4332]">Citizen Grievance Description:</div>
+        <p class="text-[#5F685F]" id="modalDesc">
+          हमारे गांव रामपुर कलां में मेन ट्रांसफार्मर 3 दिन से जल गया है।
+        </p>
+        <div class="text-[#5F685F]">Citizen: <span class="font-medium text-[#1B4332]" id="modalCitizen">Rameshwar Patel (9876543210)</span></div>
+      </div>
+
+      <!-- Before Evidence -->
+      <div>
+        <div class="text-xs font-bold text-[#1B4332] mb-1">Citizen Reported Evidence (BEFORE):</div>
+        <img id="modalBeforeImg" src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80" alt="Before Evidence" class="w-full h-36 object-cover rounded-xl border border-[#E8DEC8]">
+      </div>
+
+      <!-- Official Action Form -->
+      <form onsubmit="handleOfficialSubmit(event)" class="space-y-4 pt-2 border-t border-[#E8DEC8]">
+        <h4 class="font-baloo font-bold text-base text-[#1B4332]">
+          🛠️ Upload Official Resolution Proof
+        </h4>
+
+        <div>
+          <label class="block text-xs font-bold text-[#1B4332] mb-1">Update Status *</label>
+          <select id="modalStatusSelect" class="touch-target w-full px-3 rounded-xl border border-[#E8DEC8] bg-[#FAF6EC] font-semibold text-xs outline-none">
+            <option value="In Progress">⚙️ In Progress (Field Team Dispatched)</option>
+            <option value="Resolved">✅ Resolved (Submit Proof for Citizen Confirmation)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-[#1B4332] mb-1">Upload AFTER Proof Photo *</label>
+          <div class="flex items-center gap-3">
+            <img id="modalAfterPreview" src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=400&q=80" alt="After Preview" class="w-20 h-16 object-cover rounded-xl border border-[#E8DEC8]">
+            <div class="space-y-1">
+              <button type="button" onclick="sampleRepairPhoto()" class="text-xs text-[#E07A24] font-bold underline">
+                Use verified high-res repair photo
+              </button>
+              <div class="text-[11px] text-[#5F685F]">Geo-tagged metadata will be verified against complaint location.</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-[#1B4332] mb-1">Action Taken & Resolution Notes *</label>
+          <textarea id="modalNotes" rows="2" class="w-full p-2.5 rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] text-xs outline-none" placeholder="Describe work done on site...">Replaced burnt 25kVA unit with new 63 kVA transformer. Restored all 3 phases in Ward 4. Tested at 230V balanced.</textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2 border-t border-[#E8DEC8]">
+          <button type="button" onclick="closeOfficialModal()" class="touch-target px-4 rounded-xl border border-[#E8DEC8] text-xs font-semibold">Cancel</button>
+          <button type="submit" class="touch-target px-5 rounded-xl bg-[#1B4332] hover:bg-[#143626] text-white text-xs font-bold shadow-sm">Save & Forward to Citizen</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- FOOTER (All Pages) -->
+  <!-- ======================================================== -->
+  <footer class="bg-[#FAF6EC] border-t border-[#E8DEC8] py-8 px-4 text-xs text-[#5F685F] mt-auto">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-[#1B4332] text-white font-baloo font-bold text-sm flex items-center justify-center">
+          ग्रा
+        </div>
+        <div>
+          <div class="font-baloo font-bold text-[#1B4332] text-sm">GramSetu (ग्राम सेतु)</div>
+          <div>Empowering Rural India through AI-Assisted Civic Governance</div>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4 text-center sm:text-right">
+        <span>Toll-Free Helpline: <strong class="text-[#1B4332]">1800-GRAM-SETU</strong></span>
+        <span>•</span>
+        <button onclick="navigateTo('officials')" class="text-[#1B4332] hover:underline font-semibold">Officials Sign-in Portal →</button>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ======================================================== -->
+  <!-- APPLICATION JAVASCRIPT STATE ENGINE -->
+  <!-- ======================================================== -->
+  <script>
+    // State Store for Preloaded and Newly Registered Complaints
+    const defaultComplaints = [
+      {
+        id: "GRV-2026-004821",
+        citizen: "Rameshwar Patel",
+        phone: "9876543210",
+        district: "Varanasi",
+        village: "Rampur Kalan (Ward 4)",
+        category: "Electricity",
+        dept: "State Electricity Distribution Company (DISCOM)",
+        officer: "Er. R. Sharma (Junior Engineer, Sevapuri)",
+        slaDays: 2,
+        slaDeadline: "Within 48h (Oct 4, 2026)",
+        status: "In Progress",
+        description: "हमारे गांव रामपुर कलां में मेन ट्रांसफार्मर 3 दिन से जल गया है। पूरे वार्ड 4 में बिजली गुल है और पानी की मोटर भी नहीं चल रही है। परीक्षा के समय बच्चों की पढ़ाई रुक गई है।",
+        photoBefore: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80",
+        beforeCaption: "Burnt 25kVA transformer unit with ruptured coil",
+        photoAfter: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=600&q=80",
+        afterCaption: "Brand new 63kVA copper-wound unit energized and tested",
+        actionNotes: "Replaced burnt unit with heavy capacity 63 kVA transformer. Phase voltages verified (230V balanced). Water booster pump restored in Ward 4. Verified on-site by JE Er. R. Sharma.",
+        citizenConfirmed: false
+      },
+      {
+        id: "GRV-2026-003912",
+        citizen: "Kavita Devi",
+        phone: "9123456789",
+        district: "Satara",
+        village: "Bavdhan Khurd",
+        category: "Water",
+        dept: "Rural Water Supply & Sanitation (Jal Shakti)",
+        officer: "S. K. Kadam (Sub-Divisional Officer)",
+        slaDays: 3,
+        slaDeadline: "Within 3 Days (Oct 3, 2026)",
+        status: "Resolved",
+        description: "गावच्या मुख्य सार्वजनिक विहिरीची पाइपलाइन फुटल्याने गढूळ पाणी येत आहे. ३०० कुटुंबांना पिण्याचे पाणी नाही.",
+        photoBefore: "https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=600&q=80",
+        beforeCaption: "Broken PVC main pipeline flooding the pathway",
+        photoAfter: "https://images.unsplash.com/photo-1574482620826-40685ca5ebd2?auto=format&fit=crop&w=600&q=80",
+        afterCaption: "New high-density HDPE line welded and water purity test passed",
+        actionNotes: "Excavated line at bend, replaced 12 meters of cracked PVC with reinforced HDPE conduit. Chlorination completed in main storage tank.",
+        citizenConfirmed: false
+      },
+      {
+        id: "GRV-2026-002150",
+        citizen: "Harishankar Yadav",
+        phone: "9811223344",
+        district: "Patna Rural",
+        village: "Bikrampur Gram",
+        category: "Roads",
+        dept: "Public Works Department (PWD / Gram Panchayat)",
+        officer: "A. K. Verma (Assistant Engineer)",
+        slaDays: 15,
+        slaDeadline: "Completed within SLA",
+        status: "Closed",
+        description: "मुख्य सड़क पर बरसात के बाद 3 बड़े गड्ढे हो गए हैं। स्कूल की बस फंस जाती है और रात में बाइक सवार गिर जाते हैं।",
+        photoBefore: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=600&q=80",
+        beforeCaption: "Deep potholes on village arterial link road",
+        photoAfter: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80",
+        afterCaption: "Bitumen compaction and asphalt overlay completed",
+        actionNotes: "Pothole patch repair executed with hot mix asphalt. Leveling and roller compaction completed across 85 meters.",
+        citizenConfirmed: true
+      }
+    ];
+
+    try { localStorage.removeItem("gramsetu_grievances_v2"); } catch (_) {}
+    let grievances = [];
+
+    function saveGrievances() {
+      // Complaint records are server-owned. Never persist private reports in browser storage.
+      updateCounts();
+    }
+
+    // Navigation Switcher
+    function navigateTo(screenId) {
+      if (screenId === 'report' && !authUser) {
+        openAuthModal(() => navigateTo('report'));
+        showToast("Login required", "Please verify your mobile number before registering a complaint.", "🔐");
+        return;
+      }
+      if (screenId === 'track' && !authUser) {
+        openAuthModal(() => navigateTo('track'));
+        showToast("Login required", "Please sign in to securely view complaint details.", "🔐");
+        return;
+      }
+      if (screenId === 'admin' && (!authUser || authUser.role !== 'admin')) {
+        showToast("Access denied", "Administrator access is required.", "🛡️");
+        return;
+      }
+
+      ['home', 'report', 'track', 'officials', 'admin'].forEach(id => {
+        const el = document.getElementById(`screen-${id}`);
+        if (el) el.classList.add('hidden');
+      });
+
+      ['home', 'report', 'track', 'officials', 'admin'].forEach(key => {
+        const btn = document.getElementById(`nav-btn-${key}`);
+        if (btn) btn.className = 'touch-target px-3 sm:px-4 py-1.5 rounded-full text-[15px] sm:text-[16px] font-semibold transition-all text-[#1B4332] hover:bg-[#F4EEDF] flex items-center gap-1.5';
+      });
+
+      const activeBtn = document.getElementById(`nav-btn-${screenId}`);
+      if (activeBtn) activeBtn.className = 'touch-target px-3 sm:px-4 py-1.5 rounded-full text-[15px] sm:text-[16px] font-semibold transition-all bg-[#1B4332] text-white shadow-sm flex items-center gap-1.5';
+
+      document.getElementById(`screen-${screenId}`).classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (screenId === 'officials') renderOfficialGrid();
+      if (screenId === 'admin') loadAdminDashboard();
+    }
+
+    // OTP authentication state
+    let authUser = null;
+    let authAfterLogin = null;
+
+    function openAuthModal(afterLogin = null) {
+      authAfterLogin = afterLogin;
+      document.getElementById('authModal').classList.remove('hidden');
+      document.getElementById('auth-phone').focus();
+    }
+
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    function backToPhoneStep() {
+      document.getElementById('otp-verify-step').classList.add('hidden');
+      document.getElementById('otp-phone-step').classList.remove('hidden');
+      document.getElementById('auth-otp').value = '';
+    }
+
+    function updateAuthUI() {
+      const btn = document.getElementById('auth-btn-text');
+      const adminNav = document.getElementById('nav-btn-admin');
+      if (authUser) {
+        btn.textContent = authUser.name ? `Hi, ${authUser.name.split(' ')[0]}` : 'Account';
+        document.getElementById('auth-btn').onclick = logoutUser;
+        document.getElementById('auth-btn').querySelector('span').textContent = '✓';
+        if (adminNav) {
+          adminNav.classList.toggle('hidden', authUser.role !== 'admin');
+          adminNav.classList.toggle('inline-flex', authUser.role === 'admin');
+        }
+      } else {
+        btn.textContent = 'Login';
+        document.getElementById('auth-btn').onclick = () => openAuthModal();
+        document.getElementById('auth-btn').querySelector('span').textContent = '🔐';
+        if (adminNav) {
+          adminNav.classList.add('hidden');
+          adminNav.classList.remove('inline-flex');
+        }
+      }
+    }
+
+    async function checkAuth() {
+      try {
+        const res = await fetch('/api/auth/me', { credentials: 'same-origin', cache: 'no-store' });
+        if (!res.ok) {
+          authUser = null;
+          updateAuthUI();
+          return;
+        }
+        const data = await res.json();
+        authUser = data.user || null;
+        updateAuthUI();
+        if (authUser) {
+          document.getElementById('repName').value = authUser.name || document.getElementById('repName').value;
+          document.getElementById('repPhone').value = authUser.phone || document.getElementById('repPhone').value;
+        }
+      } catch (err) {
+        // Fail closed: if the server cannot verify the session, do not trust stale UI state.
+        authUser = null;
+        updateAuthUI();
+        console.error('Authentication check failed; protected screens remain unavailable.', err);
+      }
+    }
+
+    async function requestOTP() {
+      const phone = document.getElementById('auth-phone').value.replace(/\D/g, '');
+      const name = document.getElementById('auth-name').value.trim();
+      const message = document.getElementById('auth-message');
+      const btn = document.getElementById('requestOtpBtn');
+
+      if (!/^\d{10}$/.test(phone)) {
+        message.textContent = 'Please enter a valid 10-digit Indian mobile number.';
+        message.className = 'text-sm rounded-xl p-3 bg-red-50 text-red-700';
+        message.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending OTP…';
+      message.classList.add('hidden');
+
+      try {
+        const res = await fetch('/api/auth/request-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ phone, name })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Unable to send OTP.');
+
+        document.getElementById('otp-phone-display').textContent = `+91 ${phone}`;
+        if (data.dev_otp) {
+          const hint = document.getElementById('dev-otp-hint');
+          hint.textContent = `Development OTP: ${data.dev_otp}`;
+          hint.classList.remove('hidden');
+        }
+        document.getElementById('otp-phone-step').classList.add('hidden');
+        document.getElementById('otp-verify-step').classList.remove('hidden');
+        document.getElementById('auth-otp').focus();
+      } catch (err) {
+        message.textContent = err.message;
+        message.className = 'text-sm rounded-xl p-3 bg-red-50 text-red-700';
+        message.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send OTP';
+      }
+    }
+
+    async function verifyOTP() {
+      const phone = document.getElementById('auth-phone').value.replace(/\D/g, '');
+      const otp = document.getElementById('auth-otp').value.trim();
+      const name = document.getElementById('auth-name').value.trim();
+      const message = document.getElementById('verify-message');
+      const btn = document.getElementById('verifyOtpBtn');
+
+      if (!/^\d{6}$/.test(otp)) {
+        message.textContent = 'Enter the 6-digit OTP.';
+        message.className = 'text-sm rounded-xl p-3 bg-red-50 text-red-700';
+        message.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying…';
+
+      try {
+        const res = await fetch('/api/auth/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ phone, otp, name })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'OTP verification failed.');
+
+        const previousPhone = authUser && authUser.phone ? String(authUser.phone) : null;
+        const nextPhone = data.user && data.user.phone ? String(data.user.phone) : null;
+        if (previousPhone && nextPhone && previousPhone !== nextPhone) clearPrivateReportUI();
+        authUser = data.user;
+        updateAuthUI();
+        document.getElementById('repName').value = authUser.name || '';
+        document.getElementById('repPhone').value = authUser.phone || phone;
+        closeAuthModal();
+        showToast("Login successful", `Welcome ${authUser.name || 'to GramSetu'}.`, "✓");
+
+        if (authAfterLogin) {
+          const callback = authAfterLogin;
+          authAfterLogin = null;
+          callback();
+        }
+      } catch (err) {
+        message.textContent = err.message;
+        message.className = 'text-sm rounded-xl p-3 bg-red-50 text-red-700';
+        message.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Verify & Login';
+      }
+    }
+
+    // Remove account-specific report UI whenever the authenticated identity changes.
+    function clearPrivateReportUI() {
+      grievances = [];
+      lastRegisteredId = null;
+      const resultView = document.getElementById('trackResultView');
+      if (resultView) resultView.classList.add('hidden');
+      const idInput = document.getElementById('trackIdInput');
+      const phoneInput = document.getElementById('trackPhoneInput');
+      if (idInput) idInput.value = '';
+      if (phoneInput) phoneInput.value = '';
+      const successBox = document.getElementById('report-success-container');
+      if (successBox) successBox.classList.add('hidden');
+      const formBox = document.getElementById('report-form-container');
+      if (formBox) formBox.classList.remove('hidden');
+      const complaintId = document.getElementById('succ-complaint-id');
+      if (complaintId) complaintId.textContent = '';
+      ['succ-category', 'succ-sla', 'succ-dept', 'succ-notes'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = '';
+      });
+      const form = document.getElementById('reportForm');
+      if (form) form.reset();
+      // Restore account-owned fields after reset on the next verified login.
+    }
+
+    async function logoutUser() {
+      try {
+        const res = await fetch('/api/auth/logout', { method: 'POST', credentials: 'same-origin', cache: 'no-store' });
+        if (!res.ok) throw new Error('The server could not confirm logout. Please retry.');
+        // Only update the UI after the server confirms session revocation.
+        clearPrivateReportUI();
+        authUser = null;
+        updateAuthUI();
+        navigateTo('home');
+        showToast("Logged out", "The server ended your session. Sign in again to access private reports.", "✓");
+      } catch (err) {
+        showToast("Logout could not be confirmed", err.message || 'Check your connection and try again.', "⚠️");
+      }
+    }
+
+    // Toast System
+    let toastTimer;
+    function showToast(title, desc, icon = "ℹ️") {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-title').textContent = title;
+      document.getElementById('toast-desc').textContent = desc;
+      document.getElementById('toast-icon').textContent = icon;
+
+      toast.classList.remove('-translate-y-10', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('-translate-y-10', 'opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
+
+    // Preset Autofill in Report Screen
+    function setPreset(type) {
+      const desc = document.getElementById('repDesc');
+      const thumb = document.getElementById('thumb-img-1');
+      if (type === 'transformer') {
+        desc.value = "हमारे गांव रामपुर कलां में मेन ट्रांसफार्मर 3 दिन से जल गया है। पूरे वार्ड 4 में बिजली गुल है और पानी की मोटर भी नहीं चल रही है। परीक्षा के समय बच्चों की पढ़ाई रुक गई है।";
+        thumb.src = "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80";
+      } else if (type === 'water') {
+        desc.value = "गांव की मुख्य पेयजल पाइपलाइन फूट गई है और हैंडपंप से मटमैला पानी आ रहा है। 80 परिवारों में पीने के पानी का संकट है।";
+        thumb.src = "https://images.unsplash.com/photo-1584467735871-8e85353a8413?auto=format&fit=crop&w=400&q=80";
+      } else if (type === 'road') {
+        desc.value = "गांव को जोड़ने वाली पक्की सड़क पर बरसात के बाद 3 बड़े गड्ढे बन गए हैं। रात में कई साइकिल और बाइक सवार गिरकर घायल हो चुके हैं।";
+        thumb.src = "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=400&q=80";
+      } else if (type === 'sanitation') {
+        desc.value = "प्राथमिक स्कूल के पास खुली नाली कचरे से भर गई है। गंदा पानी स्कूल के गेट पर जमा है जिससे बदबू और बीमारी फैलने का खतरा है।";
+        thumb.src = "https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?auto=format&fit=crop&w=400&q=80";
+      }
+      showToast("Preset Loaded", "Autofilled with a realistic village example", "💡");
+    }
+
+    // Voice Simulation
+    let voiceActive = false;
+    let voiceInterval = null;
+    function toggleVoiceInput() {
+      const btn = document.getElementById('repVoiceBtn');
+      const text = document.getElementById('voice-text');
+      const desc = document.getElementById('repDesc');
+
+      if (!voiceActive) {
+        voiceActive = true;
+        btn.classList.add('bg-red-600', 'text-white', 'animate-pulse');
+        text.textContent = "Listening... (सुन रहा है)";
+        desc.value = "";
+        showToast("Voice Input Active", "Speak now in Hindi, English or regional dialect", "🎙️");
+
+        const phrases = [
+          "हमारे गांव रामपुर कलां में मेन ट्रांसफार्मर 3 दिन से जल गया है...",
+          "पूरे वार्ड 4 में बिजली नहीं आ रही...",
+          "पानी भरने की मोटर भी बंद है, कृपया तुरंत नया ट्रांसफार्मर लगवाएं।"
+        ];
+        let p = 0;
+        voiceInterval = setInterval(() => {
+          if (p < phrases.length) {
+            desc.value += (p > 0 ? " " : "") + phrases[p];
+            p++;
+          } else {
+            stopVoice();
+          }
+        }, 1100);
+      } else {
+        stopVoice();
+      }
+    }
+
+    function stopVoice() {
+      voiceActive = false;
+      clearInterval(voiceInterval);
+      const btn = document.getElementById('repVoiceBtn');
+      const text = document.getElementById('voice-text');
+      btn.classList.remove('bg-red-600', 'text-white', 'animate-pulse');
+      text.textContent = "बोलकर लिखें (Voice)";
+      showToast("Speech Transcribed", "Text captured from audio voice note", "✓");
+    }
+
+    // GPS Geolocation Capture
+    function captureGPSLocation() {
+      const btnLabel = document.getElementById('gps-button-label');
+      btnLabel.textContent = "Acquiring GPS Satellite Lock…";
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            const lat = pos.coords.latitude.toFixed(4);
+            const lng = pos.coords.longitude.toFixed(4);
+            const acc = Math.round(pos.coords.accuracy || 4);
+            document.getElementById('gps-display-text').textContent = `GPS Captured: ${lat}° N, ${lng}° E (Accuracy: ± ${acc}m)`;
+            btnLabel.textContent = "Location Locked ✓";
+            showToast("GPS Location Captured", `${lat}° N, ${lng}° E with ±${acc}m satellite accuracy`, "📍");
+          },
+          () => {
+            // Simulated fallback coordinates for village demo
+            document.getElementById('gps-display-text').textContent = `GPS Captured: 25.3176° N, 82.9739° E (Accuracy: ± 4m)`;
+            btnLabel.textContent = "Location Locked ✓";
+            showToast("Location Fixed", "Village landmark coordinates locked", "📍");
+          }
+        );
+      } else {
+        document.getElementById('gps-display-text').textContent = `GPS Captured: 25.3176° N, 82.9739° E (Accuracy: ± 4m)`;
+        btnLabel.textContent = "Location Locked ✓";
+      }
+    }
+
+    // Photo file preview
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          document.getElementById('thumb-img-1').src = evt.target.result;
+          showToast("Photo Added", file.name + " uploaded with camera EXIF tag", "📸");
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function removePhoto() {
+      document.getElementById('thumb-img-1').src = "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80";
+      showToast("Photo Reset", "Default placeholder restored", "✕");
+    }
+
+    // AI Classification logic for Report Submission
+    function classifyGrievance(text) {
+      const lower = text.toLowerCase();
+      if (lower.includes('बिजली') || lower.includes('ट्रांसफार्मर') || lower.includes('electric') || lower.includes('power') || lower.includes('transformer')) {
+        return {
+          catEmoji: "⚡ Electricity",
+          dept: "State Electricity Distribution Company (DISCOM)",
+          officer: "Er. R. Sharma (Junior Engineer, Sevapuri)",
+          slaDays: 2,
+          slaDeadline: "Within 2 Days (Oct 4, 2026)",
+          notes: "Burnt distribution transformer affecting ~80 households in Ward 4. Urgent replacement requisition generated."
+        };
+      } else if (lower.includes('पानी') || lower.includes('नल') || lower.includes('water') || lower.includes('pipe') || lower.includes('handpump')) {
+        return {
+          catEmoji: "💧 Drinking Water",
+          dept: "Rural Water Supply & Sanitation (Jal Shakti)",
+          officer: "S. K. Kadam (Sub-Divisional Officer, PHED)",
+          slaDays: 3,
+          slaDeadline: "Within 3 Days (Oct 5, 2026)",
+          notes: "Drinking water pipeline leak causing muddy water contamination. Chlorination & conduit repair mandated."
+        };
+      } else if (lower.includes('सड़क') || lower.includes('गड्ढे') || lower.includes('road') || lower.includes('pothole')) {
+        return {
+          catEmoji: "🛣️ Road & Infrastructure",
+          dept: "Public Works Department (PWD / Gram Panchayat)",
+          officer: "A. K. Verma (Assistant Engineer, Road Div)",
+          slaDays: 15,
+          slaDeadline: "Within 15 Days (Oct 17, 2026)",
+          notes: "Deep pothole craters compromising arterial village link road and school transit."
+        };
+      } else if (lower.includes('नाली') || lower.includes('कचरा') || lower.includes('drain') || lower.includes('sanitation')) {
+        return {
+          catEmoji: "🧹 Sanitation & Drain",
+          dept: "Gram Panchayat / Swachh Bharat Cell",
+          officer: "Block Development Officer (Sanitation Cell)",
+          slaDays: 7,
+          slaDeadline: "Within 7 Days (Oct 9, 2026)",
+          notes: "Clogged masonry drain overflowing near school perimeter. Desilting crew scheduled."
+        };
+      } else {
+        return {
+          catEmoji: "📌 Village Grievance",
+          dept: "Gram Panchayat / BDO Office",
+          officer: "Panchayat Secretary",
+          slaDays: 14,
+          slaDeadline: "Within 14 Days (Oct 16, 2026)",
+          notes: "General rural welfare grievance logged and assigned to local administrative wing."
+        };
+      }
+    }
+
+    // Submit Grievance with Loading State
+    let lastRegisteredId = null;
+
+    async function handleReportSubmit(e) {
+      e.preventDefault();
+
+      if (!authUser) {
+        openAuthModal(() => document.getElementById('reportForm').requestSubmit());
+        return;
+      }
+
+      const btn = document.getElementById('submitGrievanceBtn');
+      const btnIcon = document.getElementById('btn-submit-icon');
+      const btnText = document.getElementById('btn-submit-text');
+
+      btn.disabled = true;
+      btn.classList.add('opacity-80');
+      btnIcon.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>`;
+      btnText.textContent = "Understanding your complaint with AI…";
+
+      const name = document.getElementById('repName').value;
+      const phone = document.getElementById('repPhone').value;
+      const village = document.getElementById('repVillage').value;
+      const district = document.getElementById('repDistrict').value;
+      const desc = document.getElementById('repDesc').value;
+      const photoSrc = document.getElementById('thumb-img-1').src;
+
+      try {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        btnText.textContent = "Routing to the right department…";
+
+        const res = await fetch('/api/grievances', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({
+            name,
+            phone,
+            village,
+            district,
+            description: desc,
+            photo_before: photoSrc
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Could not register complaint.');
+
+        const record = data.record;
+        lastRegisteredId = data.complaint_id;
+
+        const newComplaint = {
+          id: record.id,
+          citizen: record.citizen_name,
+          phone: record.phone,
+          village: record.village,
+          district: record.district,
+          category: record.category,
+          dept: record.department,
+          officer: record.assigned_officer,
+          priority: record.priority,
+          slaDays: Math.ceil(record.sla_hours / 24),
+          slaDeadline: record.sla_deadline,
+          status: record.status,
+          description: record.description,
+          photoBefore: record.photo_before,
+          beforeCaption: record.before_caption,
+          photoAfter: "",
+          afterCaption: "",
+          actionNotes: "Complaint received and routed by GramSetu AI.",
+          citizenConfirmed: false
+        };
+
+        grievances.unshift(newComplaint);
+        saveGrievances();
+
+        document.getElementById('succ-complaint-id').textContent = record.id;
+        document.getElementById('succ-category').textContent = `📌 ${record.category}`;
+        document.getElementById('succ-sla').textContent = record.sla_deadline;
+        document.getElementById('succ-dept').textContent = record.department;
+        document.getElementById('succ-notes').textContent = `AI routed this complaint to ${record.department}. Recommended priority: ${record.priority}.`;
+
+        document.getElementById('report-form-container').classList.add('hidden');
+        document.getElementById('report-success-container').classList.remove('hidden');
+
+        showToast("Complaint Registered!", `Assigned ID: ${record.id}`, "✓");
+      } catch (err) {
+        showToast("Could not register complaint", err.message, "⚠️");
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove('opacity-80');
+        btnIcon.textContent = "🚀";
+        btnText.textContent = "Submit Complaint to GramSetu";
+      }
+    }
+
+    function resetReportForm() {
+      document.getElementById('report-form-container').classList.remove('hidden');
+      document.getElementById('report-success-container').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function copyComplaintId() {
+      const id = document.getElementById('succ-complaint-id').textContent.trim();
+      navigator.clipboard.writeText(id).then(() => {
+        showToast("Copied to Clipboard!", id, "📋");
+      }).catch(() => {
+        showToast("Complaint ID", id, "📋");
+      });
+    }
+
+    function trackRegisteredComplaint() {
+      document.getElementById('trackIdInput').value = lastRegisteredId;
+      navigateTo('track');
+      renderTrackDetails(lastRegisteredId);
+    }
+
+    // Track Screen Logic
+    function handleTrackSearch(e) {
+      e.preventDefault();
+      const id = document.getElementById('trackIdInput').value.trim().toUpperCase();
+      renderTrackDetails(id);
+    }
+
+    function loadSampleTicket(id) {
+      document.getElementById('trackIdInput').value = id;
+      renderTrackDetails(id);
+    }
+
+    async function renderTrackDetails(id) {
+      if (!authUser) {
+        openAuthModal(() => { navigateTo('track'); renderTrackDetails(id); });
+        showToast("Login required", "Please sign in to view complaint details.", "🔐");
+        return;
+      }
+      // Always ask the server for the report. Never render sample/localStorage reports here.
+      let g;
+      try {
+        const res = await fetch(`/api/grievances/${encodeURIComponent(id)}`, {
+          credentials: 'same-origin', cache: 'no-store', headers: { 'Accept': 'application/json' }
+        });
+        if (res.status === 401) {
+          authUser = null;
+          updateAuthUI();
+          const resultView = document.getElementById('trackResultView');
+          if (resultView) resultView.classList.add('hidden');
+          showToast("Session expired", "Please sign in again to access reports.", "🔐");
+          return;
+        }
+        if (!res.ok) throw new Error('Report not found or you do not have permission to view it.');
+        const payload = await res.json();
+        const r = payload.data;
+        if (!r) throw new Error('Report not found or you do not have permission to view it.');
+        g = {
+          id: r.id, citizen: r.citizen_name || r.citizen, phone: r.phone,
+          village: r.village, district: r.district, category: r.category,
+          dept: r.department || r.dept, officer: r.assigned_officer || r.officer,
+          priority: r.priority, slaDays: r.sla_days, slaDeadline: r.sla_deadline || r.slaDeadline,
+          status: r.status, description: r.description,
+          photoBefore: r.photo_before || r.photoBefore, beforeCaption: r.before_caption || r.beforeCaption,
+          photoAfter: r.photo_after || r.photoAfter, afterCaption: r.after_caption || r.afterCaption,
+          actionNotes: r.action_notes || r.actionNotes, citizenConfirmed: Boolean(r.citizen_confirmed || r.citizenConfirmed)
+        };
+      } catch (err) {
+        const resultView = document.getElementById('trackResultView');
+        if (resultView) resultView.classList.add('hidden');
+        showToast("Report unavailable", err.message || "The report could not be loaded securely.", "⚠️");
+        return;
+      }
+      const resultView = document.getElementById('trackResultView');
+      if (resultView) resultView.classList.remove('hidden');
+      document.getElementById('trkResultId').textContent = g.id;
+      document.getElementById('trkMetaSubtitle').textContent = `Filed by ${g.citizen} • ${g.village}, ${g.district}`;
+      document.getElementById('trkDeadlineNote').textContent = g.slaDeadline;
+      document.getElementById('trkOriginalDesc').textContent = g.description;
+      document.getElementById('trkDeptName').textContent = g.dept;
+      document.getElementById('trkOfficerName').textContent = g.officer;
+
+      // Status Badge
+      const statusBadge = document.getElementById('trkStatusBadge');
+      statusBadge.textContent = g.status;
+      if (g.status === 'Resolved') {
+        statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300';
+      } else if (g.status === 'Closed') {
+        statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332] border border-[#1B4332]/30';
+      } else {
+        statusBadge.className = 'px-3 py-1 rounded-full text-xs font-bold bg-[#E07A24]/15 text-[#E07A24] border border-[#E07A24]/30';
+      }
+
+      // Step 4 & 5 Visuals
+      const step4Icon = document.getElementById('step4-icon');
+      const step5Icon = document.getElementById('step5-icon');
+      const step5Title = document.getElementById('step5-title');
+
+      if (g.status === 'Resolved') {
+        step4Icon.className = 'w-9 h-9 rounded-full bg-[#1B4332] text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0';
+        step4Icon.innerHTML = '✓';
+        step5Icon.className = 'w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0 pulse-glow';
+        step5Icon.innerHTML = '🔍';
+        step5Title.textContent = '5. Resolved (Confirm)';
+      } else if (g.status === 'Closed') {
+        step4Icon.className = 'w-9 h-9 rounded-full bg-[#1B4332] text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0';
+        step4Icon.innerHTML = '✓';
+        step5Icon.className = 'w-9 h-9 rounded-full bg-[#1B4332] text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0';
+        step5Icon.innerHTML = '✓';
+        step5Title.textContent = '5. Closed & Verified';
+      } else {
+        step4Icon.className = 'w-9 h-9 rounded-full bg-[#E07A24] text-white flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0 pulse-glow';
+        step4Icon.innerHTML = '⚙️';
+        step5Icon.className = 'w-9 h-9 rounded-full bg-[#FAF6EC] border-2 border-[#E8DEC8] text-[#5F685F] flex items-center justify-center font-bold text-sm flex-shrink-0';
+        step5Icon.innerHTML = '5';
+        step5Title.textContent = '5. Resolved';
+      }
+
+      // Proof Images
+      document.getElementById('proofBeforeImg').src = g.photoBefore || "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80";
+      document.getElementById('proofBeforeCaption').textContent = g.beforeCaption || "Citizen reported initial photo evidence";
+      document.getElementById('proofAfterImg').src = g.photoAfter || "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=600&q=80";
+      document.getElementById('proofAfterCaption').textContent = g.afterCaption || "Repair completed on site";
+      document.getElementById('proofActionNotes').textContent = g.actionNotes || "Work completed and verified by local junior engineer.";
+
+      // Citizen Confirmation Card Toggle
+      const confirmCard = document.getElementById('trkCitizenConfirmationCard');
+      const closedBanner = document.getElementById('trkClosedBanner');
+
+      if (g.status === 'Resolved' && !g.citizenConfirmed) {
+        confirmCard.classList.remove('hidden');
+        closedBanner.classList.add('hidden');
+      } else if (g.status === 'Closed' && g.citizenConfirmed) {
+        confirmCard.classList.add('hidden');
+        closedBanner.classList.remove('hidden');
+      } else {
+        confirmCard.classList.add('hidden');
+        closedBanner.classList.add('hidden');
+      }
+
+      showToast("Complaint Loaded", `${g.id} • ${g.status}`, "✓");
+    }
+
+    // Citizen Confirmation Actions
+    function confirmResolutionYes() {
+      const id = document.getElementById('trkResultId').textContent.trim();
+      const g = grievances.find(item => item.id === id);
+      if (g) {
+        g.status = "Closed";
+        g.citizenConfirmed = true;
+        saveGrievances();
+        renderTrackDetails(id);
+        showToast("Resolution Confirmed!", "Thank you for making your village better", "🎉");
+      }
+    }
+
+    function confirmResolutionNo() {
+      const id = document.getElementById('trkResultId').textContent.trim();
+      const g = grievances.find(item => item.id === id);
+      if (g) {
+        g.status = "In Progress";
+        g.citizenConfirmed = false;
+        g.slaDeadline = "🚨 Auto-escalated to Sub-Divisional Magistrate (SDM)";
+        g.actionNotes += " [DISPUTED BY CITIZEN: Work was not completed satisfactorily. Reopened & escalated.]";
+        saveGrievances();
+        renderTrackDetails(id);
+        showToast("Reopened & Escalated", "Ticket escalated to Sub-Divisional Magistrate for inquiry", "🚨");
+      }
+    }
+
+    // Officials Dashboard Logic
+    let currentOffStatusFilter = "ALL";
+
+    function filterOffStatus(st) {
+      currentOffStatusFilter = st;
+      document.querySelectorAll('.off-filter-pill').forEach(btn => {
+        btn.className = 'off-filter-pill px-3 py-1 rounded-full bg-[#FAF6EC] border border-[#E8DEC8] text-[#1B4332]';
+      });
+      event.target.className = 'off-filter-pill px-3 py-1 rounded-full bg-[#1B4332] text-white font-bold';
+      renderOfficialGrid();
+    }
+
+    function renderOfficialGrid() {
+      const grid = document.getElementById('officialCardGrid');
+      const deptFilter = document.getElementById('offDeptFilter').value;
+      grid.innerHTML = "";
+
+      const filtered = grievances.filter(g => {
+        const matchesDept = (deptFilter === 'ALL' || g.category.toLowerCase().includes(deptFilter.toLowerCase()));
+        const matchesStatus = (currentOffStatusFilter === 'ALL' || g.status.toLowerCase() === currentOffStatusFilter.toLowerCase());
+        return matchesDept && matchesStatus;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-12 text-center text-[#5F685F] civic-card">
+            <span class="text-3xl block mb-2">📭</span>
+            <div class="font-baloo font-bold text-lg text-[#1B4332]">No matching complaints in docket</div>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(g => {
+        const card = document.createElement('div');
+        card.className = "civic-card p-5 space-y-3 flex flex-col justify-between hover:border-[#1B4332] transition";
+        
+        let statusBadge = "bg-[#E07A24]/15 text-[#E07A24] border-[#E07A24]/30";
+        if (g.status === 'Resolved') statusBadge = "bg-emerald-100 text-emerald-800 border-emerald-300";
+        if (g.status === 'Closed') statusBadge = "bg-[#E8F0EA] text-[#1B4332] border-[#1B4332]/30";
+
+        card.innerHTML = `
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-baloo font-extrabold text-base text-[#1B4332]">${g.id}</span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold border ${statusBadge}">${g.status}</span>
+            </div>
+
+            <div class="text-xs font-semibold text-[#E07A24]">${g.dept}</div>
+
+            <p class="text-xs text-[#5F685F] line-clamp-2 leading-relaxed">
+              ${g.description}
+            </p>
+
+            <div class="flex items-center gap-2 pt-1 text-xs text-[#5F685F]">
+              <img src="${g.photoBefore || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=400&q=80'}" class="w-10 h-10 object-cover rounded-lg border border-[#E8DEC8]">
+              <div>
+                <div class="font-bold text-[#1B4332]">${g.village}</div>
+                <div>Citizen: ${g.citizen}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-[#E8DEC8]">
+            <button onclick="openOfficialModal('${g.id}')" class="touch-target w-full py-2 px-3 rounded-xl bg-[#FAF6EC] hover:bg-[#1B4332] text-[#1B4332] hover:text-white font-baloo font-bold text-xs border border-[#E8DEC8] transition flex items-center justify-center gap-1.5">
+              <span>🛠️ Manage & Upload Proof</span>
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      updateCounts();
+    }
+
+    function updateCounts() {
+      document.getElementById('off-count-total').textContent = grievances.length;
+      document.getElementById('off-count-prog').textContent = grievances.filter(g => g.status === 'In Progress').length;
+      document.getElementById('off-count-res').textContent = grievances.filter(g => g.status === 'Resolved').length;
+      document.getElementById('off-count-closed').textContent = grievances.filter(g => g.status === 'Closed').length;
+    }
+
+    // Official Action Modal
+    let activeModalGid = null;
+    function openOfficialModal(id) {
+      activeModalGid = id;
+      const g = grievances.find(item => item.id === id);
+      if (!g) return;
+
+      document.getElementById('modalGid').textContent = g.id;
+      document.getElementById('modalBadge').textContent = g.status;
+      document.getElementById('modalVillage').textContent = `Village: ${g.village}, ${g.district}`;
+      document.getElementById('modalDesc').textContent = g.description;
+      document.getElementById('modalCitizen').textContent = `${g.citizen} (${g.phone})`;
+      document.getElementById('modalBeforeImg').src = g.photoBefore || "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=600&q=80";
+      document.getElementById('modalStatusSelect').value = (g.status === 'Closed' ? 'Resolved' : g.status);
+      document.getElementById('modalAfterPreview').src = g.photoAfter || "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=600&q=80";
+      document.getElementById('modalNotes').value = g.actionNotes || "Replaced burnt 25kVA unit with new 63 kVA transformer.";
+
+      document.getElementById('officialActionModal').classList.remove('hidden');
+    }
+
+    function closeOfficialModal() {
+      document.getElementById('officialActionModal').classList.add('hidden');
+    }
+
+    function sampleRepairPhoto() {
+      document.getElementById('modalAfterPreview').src = "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=600&q=80";
+      showToast("Photo Loaded", "Sample high-resolution field repair evidence", "📸");
+    }
+
+    function handleOfficialSubmit(e) {
+      e.preventDefault();
+      const g = grievances.find(item => item.id === activeModalGid);
+      if (!g) return;
+
+      const newStatus = document.getElementById('modalStatusSelect').value;
+      const notes = document.getElementById('modalNotes').value;
+      const afterImg = document.getElementById('modalAfterPreview').src;
+
+      g.status = newStatus;
+      g.actionNotes = notes;
+      g.photoAfter = afterImg;
+      if (newStatus === 'Resolved') {
+        g.slaDeadline = "Completed within SLA (Pending Citizen Confirmation)";
+      }
+
+      saveGrievances();
+      closeOfficialModal();
+      renderOfficialGrid();
+
+      showToast("Docket Updated!", `${g.id} updated to ${newStatus}. Sent to citizen for confirmation.`, "✓");
+    }
+
+    // =========================================================
+    // Protected Admin Dashboard
+    // =========================================================
+    let adminTab = 'complaints';
+    let adminSearchTimer = null;
+    let adminComplaintCache = [];
+
+    function adminEsc(value) {
+      return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+    }
+
+    async function adminFetch(url, options = {}) {
+      const res = await fetch(url, { credentials: 'same-origin', ...options });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || `Request failed (${res.status})`);
+      return data;
+    }
+
+    function renderAdminBars(targetId, rows, labelKey) {
+      const target = document.getElementById(targetId);
+      if (!rows || !rows.length) {
+        target.innerHTML = '<div class="text-sm text-[#5F685F]">No data yet.</div>';
+        return;
+      }
+      const max = Math.max(...rows.map(r => Number(r.count) || 0), 1);
+      target.innerHTML = rows.slice(0, 8).map(r => `
+        <div>
+          <div class="flex justify-between text-sm mb-1"><span class="font-semibold text-[#1B4332]">${adminEsc(r[labelKey])}</span><span class="font-bold">${r.count}</span></div>
+          <div class="h-2 rounded-full bg-[#F4EEDF] overflow-hidden"><div class="h-full bg-[#1B4332] rounded-full" style="width:${Math.max(5, (r.count/max)*100)}%"></div></div>
+        </div>`).join('');
+    }
+
+    async function loadAdminDashboard() {
+      if (!authUser || authUser.role !== 'admin') return;
+      document.getElementById('adminIdentity').textContent = `Admin: +91 ${authUser.phone}`;
+      document.getElementById('adminError').classList.add('hidden');
+      try {
+        const [stats, filters, db, audit] = await Promise.all([
+          adminFetch('/api/admin/stats'),
+          adminFetch('/api/admin/filters'),
+          adminFetch('/api/admin/database'),
+          adminFetch('/api/admin/audit?limit=20')
+        ]);
+        const s = stats.data;
+        document.getElementById('adm-total').textContent = s.total_complaints;
+        document.getElementById('adm-citizens').textContent = s.citizens;
+        document.getElementById('adm-high').textContent = s.high_priority;
+        document.getElementById('adm-pending').textContent = s.pending;
+        document.getElementById('adm-resolved').textContent = s.resolved;
+        renderAdminBars('adminPriorityChart', s.priority, 'priority');
+        renderAdminBars('adminCategoryChart', s.categories, 'category');
+
+        const fill = (id, values, label) => {
+          const el = document.getElementById(id);
+          const current = el.value;
+          el.innerHTML = `<option value="ALL">${label}</option>` + values.map(v => `<option value="${adminEsc(v)}">${adminEsc(v)}</option>`).join('');
+          if (values.includes(current)) el.value = current;
+        };
+        fill('admStatus', filters.data.status, 'All status');
+        fill('admPriority', filters.data.priority, 'All priority');
+        fill('admCategory', filters.data.category, 'All category');
+        fill('admDistrict', filters.data.district, 'All districts');
+
+        document.getElementById('admDbPath').textContent = db.data.path;
+        document.getElementById('admDbSize').textContent = `${(db.data.size_bytes / 1024).toFixed(1)} KB`;
+        document.getElementById('admDbTables').innerHTML = db.data.tables.map(t => `<div class="flex justify-between"><span>${adminEsc(t.table)}</span><b>${t.rows}</b></div>`).join('');
+        document.getElementById('admAudit').innerHTML = audit.data.length
+          ? audit.data.map(a => `<div class="border-b border-[#E8DEC8] pb-2"><b class="text-[#1B4332]">${adminEsc(a.action)}</b> · ${adminEsc(a.target_id || '—')}<div class="text-xs">${adminEsc(a.created_at)} · ${adminEsc(a.admin_phone)}</div></div>`).join('')
+          : '<div>No admin activity recorded yet.</div>';
+
+        await loadAdminComplaints();
+      } catch (err) {
+        const box = document.getElementById('adminError');
+        box.textContent = err.message;
+        box.classList.remove('hidden');
+      }
+    }
+
+    async function loadAdminComplaints() {
+      if (!authUser || authUser.role !== 'admin') return;
+      const params = new URLSearchParams({
+        search: document.getElementById('admSearch').value,
+        status: document.getElementById('admStatus').value,
+        priority: document.getElementById('admPriority').value,
+        category: document.getElementById('admCategory').value,
+        district: document.getElementById('admDistrict').value,
+        limit: '300'
+      });
+      try {
+        const result = await adminFetch('/api/admin/complaints?' + params);
+        adminComplaintCache = result.data;
+        const body = document.getElementById('adminComplaintsBody');
+        body.innerHTML = result.data.length ? result.data.map(g => `
+          <tr class="border-t border-[#E8DEC8] hover:bg-[#FCFAF5]">
+            <td class="p-3"><div class="font-bold text-[#1B4332]">${adminEsc(g.id)}</div><div class="text-xs text-[#5F685F]">${adminEsc(g.submitted_at)}</div></td>
+            <td class="p-3"><div class="font-semibold">${adminEsc(g.citizen_name)}</div><div class="text-xs">${adminEsc(g.phone)}</div></td>
+            <td class="p-3">${adminEsc(g.village)}<div class="text-xs text-[#5F685F]">${adminEsc(g.district)}</div></td>
+            <td class="p-3"><b>${adminEsc(g.category)}</b><div class="text-xs text-[#5F685F] max-w-[230px]">${adminEsc(g.department)}</div></td>
+            <td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${g.priority === 'High' || g.priority === 'Emergency Escalation' ? 'bg-red-50 text-red-700' : g.priority === 'Medium' ? 'bg-[#FDF1E6] text-[#C96615]' : 'bg-[#E8F0EA] text-[#1B4332]'}">${adminEsc(g.priority)}</span></td>
+            <td class="p-3">${adminEsc(g.status)}</td>
+            <td class="p-3 flex gap-2">
+              <button onclick="showAiAnalysis('${adminEsc(g.id)}')" class="px-3 py-2 rounded-lg bg-[#E8F0EA] text-[#1B4332] font-bold hover:bg-[#1B4332] hover:text-white">AI</button>
+              <button onclick="clusterComplaint('${adminEsc(g.id)}')" class="px-3 py-2 rounded-lg bg-[#FDF1E6] text-[#C96615] font-bold hover:bg-[#C96615] hover:text-white">Similar</button>
+              <button onclick="openAdminComplaintEditor('${adminEsc(g.id)}')" class="px-3 py-2 rounded-lg border border-[#E8DEC8] text-[#1B4332] font-bold hover:bg-[#1B4332] hover:text-white">Edit</button>
+            </td>
+          </tr>`).join('')
+          : '<tr><td colspan="7" class="p-8 text-center text-[#5F685F]">No complaints match these filters.</td></tr>';
+      } catch (err) {
+        showToast("Admin data error", err.message, "⚠️");
+      }
+    }
+
+    function debouncedAdminComplaints() {
+      clearTimeout(adminSearchTimer);
+      adminSearchTimer = setTimeout(loadAdminComplaints, 250);
+    }
+
+    function switchAdminTab(tab) {
+      adminTab = tab;
+      document.getElementById('adminComplaintsPanel').classList.toggle('hidden', tab !== 'complaints');
+      document.getElementById('adminCitizensPanel').classList.toggle('hidden', tab !== 'citizens');
+      document.getElementById('adminClustersPanel').classList.toggle('hidden', tab !== 'clusters');
+      document.getElementById('adminDatabasePanel').classList.toggle('hidden', tab !== 'database');
+      if (tab === 'citizens') loadAdminCitizens();
+      if (tab === 'clusters') loadAdminClusters();
+      const ids = {complaints:'admTabComplaints', clusters:'admTabClusters', citizens:'admTabCitizens', database:'admTabDb'};
+      Object.values(ids).forEach(id => document.getElementById(id).className = 'px-4 py-2 rounded-xl bg-[#FAF6EC] text-[#1B4332] border border-[#E8DEC8] font-bold text-sm');
+      document.getElementById(ids[tab]).className = 'px-4 py-2 rounded-xl bg-[#1B4332] text-white font-bold text-sm';
+    }
+
+    async function loadAdminClusters() {
+      if (!authUser || authUser.role !== 'admin') return;
+      try {
+        const search = document.getElementById('admClusterSearch').value || '';
+        const result = await adminFetch('/api/admin/clusters?search=' + encodeURIComponent(search) + '&limit=300');
+        const stats = result.stats || {};
+        document.getElementById('stage2GroupCount').textContent = stats.clusters || 0;
+        document.getElementById('stage2GroupedCount').textContent = stats.clustered_complaints || 0;
+        document.getElementById('stage2LargestCount').textContent = stats.largest_cluster || 0;
+
+        const cards = document.getElementById('adminClusterCards');
+        const empty = document.getElementById('adminClusterEmpty');
+        if (!result.data.length) {
+          cards.innerHTML = '';
+          empty.classList.remove('hidden');
+          return;
+        }
+        empty.classList.add('hidden');
+        cards.innerHTML = result.data.map(c => {
+          const confidence = Math.round(Number(c.confidence_score || 0) * 100);
+          const status = c.ai_status === 'success' ? 'AI matched' : 'Local fallback';
+          const statusClass = c.ai_status === 'success' ? 'bg-[#E8F0EA] text-[#1B4332]' : 'bg-[#FDF1E6] text-[#C96615]';
+          const validationText = c.validated_confidence != null ? `${Math.round(Number(c.validated_confidence || 0) * 100)}% • ${c.validation_decision || 'POSSIBLE'}` : 'Not validated yet';
+          const validationClass = c.validation_decision === 'CONFIRMED' ? 'bg-[#E8F0EA] text-[#1B4332]' : c.validation_decision === 'CONFLICT' ? 'bg-red-50 text-red-700' : 'bg-[#FFF6DF] text-[#9A6A00]';
+          return `
+            <div class="rounded-2xl bg-white border border-[#E8DEC8] p-5 hover:shadow-md transition-shadow">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="text-xs font-bold text-[#5F685F]">${adminEsc(c.cluster_id)}</div>
+                  <h4 class="font-baloo font-bold text-xl text-[#1B4332] mt-1">${adminEsc(c.title)}</h4>
+                </div>
+                <span class="px-2.5 py-1 rounded-full text-xs font-bold ${statusClass}">${status}</span>
+              </div>
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="px-2.5 py-1 rounded-full bg-[#FAF6EC] text-xs font-semibold text-[#5F685F]">📍 ${adminEsc(c.village || 'Unknown village')}</span>
+                <span class="px-2.5 py-1 rounded-full bg-[#FAF6EC] text-xs font-semibold text-[#5F685F]">${adminEsc(c.category || 'Unknown')}</span>
+                <span class="px-2.5 py-1 rounded-full bg-[#FAF6EC] text-xs font-semibold text-[#5F685F]">${adminEsc(c.member_count || 0)} reports</span>
+              </div>
+              <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="rounded-xl bg-[#FCFAF5] border border-[#E8DEC8] p-3">
+                  <div class="text-xs text-[#5F685F] font-bold">Stage 2 confidence</div>
+                  <div class="font-bold text-[#1B4332] mt-1">${confidence}%</div>
+                </div>
+                <div class="rounded-xl bg-[#FCFAF5] border border-[#E8DEC8] p-3">
+                  <div class="text-xs text-[#5F685F] font-bold">Affected resource</div>
+                  <div class="font-bold text-[#1B4332] mt-1 truncate" title="${adminEsc(c.affected_resource || 'Unknown')}">${adminEsc(c.affected_resource || 'Unknown')}</div>
+                </div>
+                <div class="rounded-xl ${validationClass} border border-current/10 p-3">
+                  <div class="text-xs font-bold">Stage 2.5 validated confidence</div>
+                  <div class="font-bold mt-1">${adminEsc(validationText)}</div>
+                </div>
+              </div>
+              <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+                <div class="text-xs text-[#5F685F]">Updated ${adminEsc(c.updated_at || '—')}</div>
+                <div class="flex gap-2">
+                  <button onclick="validateClusterEvidence('${adminEsc(c.cluster_id)}')" class="px-3 py-2 rounded-xl border border-[#E8DEC8] bg-[#FAF6EC] text-[#1B4332] font-bold">🔎 Validate evidence</button>
+                  <button onclick="showCluster('${adminEsc(c.cluster_id)}')" class="px-4 py-2 rounded-xl bg-[#1B4332] text-white font-bold">View reports →</button>
+                </div>
+              </div>
+            </div>`;
+        }).join('');
+      } catch (err) { showToast('Similar reports error', err.message, '⚠️'); }
+    }
+
+    async function showCluster(id) {
+      const modal = document.getElementById('clusterModal');
+      const body = document.getElementById('clusterModalBody');
+      document.getElementById('clusterModalTitle').textContent = id;
+      body.innerHTML = '<div class="p-6 text-center text-[#5F685F]">Loading cluster…</div>';
+      modal.classList.remove('hidden');
+      try {
+        const result = await adminFetch('/api/admin/clusters/' + encodeURIComponent(id));
+        const c = result.data;
+        body.innerHTML = `
+          <div class="rounded-xl bg-[#E8F0EA] border border-[#1B4332]/15 p-4 mb-4">
+            <div class="text-xs font-bold text-[#5F685F]">Underlying problem</div>
+            <div class="font-bold text-[#1B4332] text-lg mt-1">${adminEsc(c.title)}</div>
+            <div class="text-sm mt-2">${adminEsc(c.category)} • ${adminEsc(c.village || 'Unknown village')} • ${adminEsc(c.district || 'Unknown district')}</div>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-3 mb-4">
+            <div class="rounded-xl bg-[#FAF6EC] border border-[#E8DEC8] p-4"><div class="text-xs font-bold text-[#5F685F]">Cluster confidence</div><div class="font-bold text-[#1B4332] mt-1">${Math.round(Number(c.confidence_score || 0)*100)}%</div></div>
+            <div class="rounded-xl bg-[#FAF6EC] border border-[#E8DEC8] p-4"><div class="text-xs font-bold text-[#5F685F]">Complaints in cluster</div><div class="font-bold text-[#1B4332] mt-1">${adminEsc(c.member_count)}</div></div>
+          </div>
+          ${c.validation ? `
+          <div class="rounded-xl border border-[#E8DEC8] bg-[#FCFAF5] p-4 mb-4">
+            <div class="flex flex-wrap items-center justify-between gap-2"><div class="font-bold text-[#1B4332]">Stage 2.5 • Evidence validation</div><span class="px-2.5 py-1 rounded-full text-xs font-bold bg-[#E8F0EA] text-[#1B4332]">${adminEsc(c.validation.decision || 'POSSIBLE')}</span></div>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-3 text-xs">
+              <div><b>Validated</b><div class="text-sm font-bold mt-1">${Math.round(Number(c.validation.validated_confidence || 0)*100)}%</div></div>
+              <div><b>Photo</b><div class="text-sm font-bold mt-1">${Math.round(Number(c.validation.photo_evidence || 0)*100)}%</div></div>
+              <div><b>Location</b><div class="text-sm font-bold mt-1">${Math.round(Number(c.validation.location_evidence || 0)*100)}%</div></div>
+              <div><b>Time</b><div class="text-sm font-bold mt-1">${Math.round(Number(c.validation.temporal_evidence || 0)*100)}%</div></div>
+              <div><b>Asset</b><div class="text-sm font-bold mt-1">${adminEsc(c.validation.asset_match || 'UNKNOWN')}</div></div>
+            </div>
+            <div class="mt-3 text-sm"><b>Finding:</b> ${adminEsc(c.validation.reason || '—')}</div>
+            ${c.validation.conflicts ? `<div class="mt-2 text-sm text-red-700"><b>Conflict:</b> ${adminEsc(c.validation.conflicts)}</div>` : ''}
+          </div>` : `
+          <div class="rounded-xl border border-[#E8DEC8] bg-[#FAF6EC] p-4 mb-4 text-sm"><b>Stage 2.5:</b> Not independently validated yet. Use <b>Validate evidence</b> to check photos, location, time and resource consistency.</div>`}
+          <div class="font-bold text-[#1B4332] mb-2">Reports grouped as the same underlying problem</div>
+          <div class="text-xs text-[#5F685F] mb-3">The first report establishes the cluster. Match percentages are shown only for reports that were matched into an existing cluster.</div>
+          <div class="space-y-2">${(c.members || []).map((m, idx) => {
+            const matchScore = Number(m.match_confidence || 0);
+            const matchLabel = idx === 0 ? 'Cluster seed' : `${Math.round(matchScore * 100)}% match`;
+            return `
+            <div class="rounded-xl border border-[#E8DEC8] p-3 bg-white">
+              <div class="flex justify-between gap-3"><b>${adminEsc(m.complaint_id)}</b><span class="text-xs font-bold text-[#5F685F]">${adminEsc(matchLabel)}</span></div>
+              <div class="text-sm mt-1">${adminEsc(m.description)}</div>
+              <div class="text-xs text-[#5F685F] mt-1">${adminEsc(m.complaint_village || '')} • ${adminEsc(m.category || '')}</div>
+            </div>`;
+          }).join('') || '<div class="text-sm text-[#5F685F]">No members.</div>'}</div>
+          <div class="mt-4 p-4 rounded-xl bg-[#FAF6EC] border border-[#E8DEC8] text-sm"><b>Why grouped:</b> ${adminEsc(c.last_reason || '—')}</div>
+          <div class="mt-4 p-4 rounded-xl bg-[#E8F0EA] border border-[#1B4332]/15 text-sm text-[#1B4332]"><b>Important:</b> Stage 2 only groups complaints. It does not set official priority or make a government decision.</div>`;
+      } catch (err) { body.innerHTML = `<div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700">${adminEsc(err.message)}</div>`; }
+    }
+
+    async function validateClusterEvidence(id) {
+      try {
+        showToast('Stage 2.5', 'Validating photos, location, time and resource evidence…', '🔎');
+        const res = await adminFetch('/api/admin/stage2_5/validate', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({cluster_id:id}) });
+        const v = res.data || {};
+        showToast('Evidence validated', `${v.decision || 'POSSIBLE'} • ${Math.round(Number(v.validated_confidence || 0) * 100)}%`, v.decision === 'CONFIRMED' ? '✅' : '⚠️');
+        await loadAdminClusters();
+        await showCluster(id);
+      } catch (err) { showToast('Validation error', err.message, '⚠️'); }
+    }
+
+    function closeCluster() { document.getElementById('clusterModal').classList.add('hidden'); }
+
+    async function loadAdminCitizens() {
+      const search = document.getElementById('admCitizenSearch').value;
+      try {
+        const result = await adminFetch('/api/admin/users?search=' + encodeURIComponent(search) + '&limit=300');
+        document.getElementById('adminCitizensBody').innerHTML = result.data.map(u => `
+          <tr class="border-t border-[#E8DEC8]">
+            <td class="p-3 font-semibold">${adminEsc(u.name || 'Unnamed')}</td><td class="p-3">${adminEsc(u.phone)}</td>
+            <td class="p-3">${adminEsc(u.village || '—')}</td><td class="p-3">${adminEsc(u.district || '—')}</td>
+            <td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${u.role === 'admin' ? 'bg-[#1B4332] text-white' : 'bg-[#E8F0EA] text-[#1B4332]'}">${adminEsc(u.role)}</span></td>
+            <td class="p-3 text-xs">${adminEsc(u.last_login_at || '—')}</td>
+          </tr>`).join('') || '<tr><td colspan="6" class="p-6 text-center">No citizens found.</td></tr>';
+      } catch (err) { showToast("Citizen data error", err.message, "⚠️"); }
+    }
+
+    function openAdminComplaintEditor(id) {
+      const g = adminComplaintCache.find(x => x.id === id);
+      if (!g) return;
+      const status = prompt(`Status for ${id} (New / In Progress / Resolved / Closed):`, g.status);
+      if (status === null) return;
+      const priority = prompt(`Priority for ${id} (Low / Medium / High / Emergency Escalation):`, g.priority);
+      if (priority === null) return;
+      updateAdminComplaint(id, status.trim(), priority.trim(), g.assigned_officer || '', g.resolution_notes || '');
+    }
+
+    async function updateAdminComplaint(id, status, priority, officer, notes) {
+      try {
+        await adminFetch('/api/admin/complaints/' + encodeURIComponent(id), {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({status, priority, assigned_officer: officer, notes})
+        });
+        showToast("Complaint updated", `${id} saved to SQLite.`, "✓");
+        await loadAdminDashboard();
+      } catch (err) { showToast("Update failed", err.message, "⚠️"); }
+    }
+
+    async function clusterComplaint(id) {
+      try {
+        const result = await adminFetch('/api/admin/stage2/cluster', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({complaint_id:id})});
+        showToast('Similar reports updated', `${id} was checked by Stage 2.`, '🔗');
+        switchAdminTab('clusters');
+        await loadAdminClusters();
+        if (result.data && result.data.cluster_id) showCluster(result.data.cluster_id);
+      } catch (err) { showToast('Similarity check failed', err.message, '⚠️'); }
+    }
+
+    async function showAiAnalysis(id) {
+      const modal = document.getElementById('aiAnalysisModal');
+      const body = document.getElementById('aiModalBody');
+      const title = document.getElementById('aiModalTitle');
+      title.textContent = `Complaint ${id}`;
+      body.innerHTML = '<div class="p-6 text-center text-[#5F685F]">Loading AI analysis…</div>';
+      modal.classList.remove('hidden');
+
+      try {
+        const result = await adminFetch('/api/admin/complaints/' + encodeURIComponent(id) + '/ai');
+        const a = result.data || {};
+        const statusClass = a.ai_status === 'success'
+          ? 'bg-[#E8F0EA] text-[#1B4332]'
+          : 'bg-[#FDF1E6] text-[#C96615]';
+
+        body.innerHTML = `
+          <div class="flex flex-wrap gap-2 mb-5">
+            <span class="px-3 py-1 rounded-full text-xs font-bold ${statusClass}">
+              ${adminEsc(a.ai_status || 'unknown')}
+            </span>
+            <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#FAF6EC] border border-[#E8DEC8] text-[#5F685F]">
+              ${adminEsc(a.ai_provider || 'unknown')}${a.ai_model ? ' • ' + adminEsc(a.ai_model) : ''}
+            </span>
+          </div>
+
+          <div class="grid sm:grid-cols-2 gap-3">
+            ${[
+              ['Category', a.category],
+              ['Problem type', a.problem_type],
+              ['Affected resource', a.affected_resource],
+              ['Scope', a.scope],
+              ['Duration', a.duration],
+              ['Affected people', a.estimated_affected_people ?? 'Unknown'],
+              ['Severity', a.severity],
+              ['Confidence', a.confidence_score == null ? 'Unknown' : Math.round(Number(a.confidence_score) * 100) + '%']
+            ].map(([label,value]) => `
+              <div class="rounded-xl bg-[#FAF6EC] border border-[#E8DEC8] p-4">
+                <div class="text-xs font-bold text-[#5F685F]">${label}</div>
+                <div class="mt-1 font-semibold text-[#1B4332]">${adminEsc(value ?? 'Unknown')}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          ${a.ai_error ? `
+            <div class="mt-4 p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700">
+              <b>AI provider note:</b> ${adminEsc(a.ai_error)}
+              <div class="mt-1">This complaint was analyzed using Gram Setu's safe local fallback.</div>
+            </div>
+          ` : ''}
+
+          <div class="mt-5 p-4 rounded-xl bg-[#E8F0EA] border border-[#1B4332]/15 text-sm text-[#1B4332]">
+            <b>Important:</b> This is an AI analysis, not an official government decision.
+            The original citizen complaint remains stored separately.
+          </div>
+        `;
+      } catch (err) {
+        body.innerHTML = `<div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700">${adminEsc(err.message)}</div>`;
+      }
+    }
+
+    function closeAiAnalysis() {
+      document.getElementById('aiAnalysisModal').classList.add('hidden');
+    }
+
+    function exportAdminComplaints() {
+      const p = new URLSearchParams({
+        search: document.getElementById('admSearch').value,
+        status: document.getElementById('admStatus').value,
+        priority: document.getElementById('admPriority').value,
+        category: document.getElementById('admCategory').value,
+        district: document.getElementById('admDistrict').value
+      });
+      window.location.href = '/api/admin/export/complaints?' + p;
+    }
+
+    // Init on load
+    window.addEventListener('DOMContentLoaded', () => {
+      updateCounts();
+      checkAuth();
+    });
+  </script>
+
+  <!-- Stage 2 underlying-problem cluster viewer -->
+  <div id="clusterModal" class="hidden fixed inset-0 z-[85] bg-black/40 backdrop-blur-sm p-4 flex items-center justify-center">
+    <div class="civic-card w-full max-w-3xl max-h-[90vh] overflow-y-auto p-6">
+      <div class="flex items-start justify-between gap-4">
+        <div><div class="text-xs font-bold text-[#E07A24] uppercase tracking-wide">Stage 2 + Stage 2.5 • Similar Reports & Evidence</div><h2 id="clusterModalTitle" class="font-baloo font-bold text-2xl text-[#1B4332] mt-1">Similar report group</h2></div>
+        <button onclick="closeCluster()" class="px-3 py-2 rounded-xl border border-[#E8DEC8] text-[#1B4332] font-bold">✕</button>
+      </div>
+      <div id="clusterModalBody" class="mt-5"></div>
+    </div>
+  </div>
+
+  <!-- Stage 1 AI analysis viewer -->
+  <div id="aiAnalysisModal" class="hidden fixed inset-0 z-[80] bg-black/40 backdrop-blur-sm p-4 flex items-center justify-center">
+    <div class="civic-card w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-xs font-bold text-[#E07A24] uppercase tracking-wide">Stage 1 • AI Analysis</div>
+          <h2 id="aiModalTitle" class="font-baloo font-bold text-2xl text-[#1B4332] mt-1">Complaint analysis</h2>
+        </div>
+        <button onclick="closeAiAnalysis()" class="px-3 py-2 rounded-xl border border-[#E8DEC8] text-[#1B4332] font-bold">✕</button>
+      </div>
+      <div id="aiModalBody" class="mt-5"></div>
+    </div>
+  </div>
+
+</body>
+</html>
