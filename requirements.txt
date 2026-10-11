@@ -1,0 +1,3 @@
+# Gram Setu Python dependencies
+# The current prototype uses only Python's standard library.
+# No third-party packages are required for the core app.
