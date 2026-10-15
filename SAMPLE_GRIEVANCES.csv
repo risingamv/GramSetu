@@ -1,0 +1,11 @@
+sample_id,complaint_text,expected_category,notes
+SG-01,"For the last two days, the hand pump near the primary school in Rampur has no water. Around 35 families use it.",Drinking Water,Fictional; affected count is explicitly stated
+SG-02,There has been no electricity in Ward 3 since yesterday evening. The whole lane is affected.,Electricity,Fictional; do not infer an exact affected-person count
+SG-03,A large pothole has been on the road between Rampur market and the bus stop for three weeks. Two-wheelers have difficulty passing.,Roads & Potholes,Fictional
+SG-04,"Garbage has not been collected near the community hall for five days, and there is a bad smell.",Sanitation & Waste,Fictional
+SG-05,"Water is not reaching the fields through the village irrigation channel, and the crops are drying.",Agriculture & Irrigation,Fictional; do not infer crop-loss amount
+SG-06,The primary health centre has been closed during its posted opening hours on two occasions this week.,Healthcare & PHC,Fictional
+SG-07,My approved government benefit has not arrived in my bank account. I checked the status yesterday.,Govt Schemes & DBT,Fictional; scheme and amount are not stated
+SG-08,The streetlight beside the village library is not working.,Depends on classifier rules,Fictional; useful ambiguity/edge case
+SG-09,There is a problem in the village.,Unclear / needs clarification,Fictional; check that missing details are not fabricated
+SG-10,The water supply is still broken near the primary school in Rampur; the same hand pump has not worked for two days.,Drinking Water,Fictional; compare with SG-01 for possible clustering
